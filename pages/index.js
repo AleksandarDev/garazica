@@ -1,7 +1,7 @@
-import Head from "next/head";
 import { useEffect } from "react";
 import anime from "animejs";
 import CoverImage from "../public/CoverDay.svg";
+import { Head } from "next/document";
 
 export default function Home() {
   useEffect(() => {
@@ -31,8 +31,10 @@ export default function Home() {
   }, []);
 
   return (
+    <div>
     <div className="converImageContainer">
       <CoverImage id="coverImage" />
+    </div>
     </div>
   );
 }
