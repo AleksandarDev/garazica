@@ -13,7 +13,7 @@ class LocalStorageService {
      * @param {string} itemValue Item's value
      * @memberof LocalStorageService
      */
-  static setItem(itemName, itemValue) {
+  static setItem(itemName: string, itemValue: string): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(itemName, itemValue);
     }
@@ -27,7 +27,7 @@ class LocalStorageService {
      * @returns item's value or null if local storage is not defined
      * @memberof LocalStorageService
      */
-  static getItem(itemName) {
+  static getItem(itemName: string): string | null {
     if (typeof localStorage !== 'undefined') {
       return localStorage.getItem(itemName);
     }
@@ -42,7 +42,7 @@ class LocalStorageService {
      * @param {string} itemName Item's name
      * @memberof LocalStorageService
      */
-  static removeItem(itemName) {
+  static removeItem(itemName: string): void {
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem(itemName);
     }

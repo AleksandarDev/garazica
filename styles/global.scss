@@ -5,8 +5,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Raleway", sans-serif;
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  overflow-x: hidden;
 }
 
 .converImageContainer {

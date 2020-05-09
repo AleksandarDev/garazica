@@ -1,14 +1,13 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
-import AppSettingsService from '../src/AppSettingsService';
 
-
-const isDark = AppSettingsService.getIsNightMode();
-const theme = createMuiTheme({
+const theme = (isDark: boolean) => createMuiTheme({
   palette: {
     type: isDark ? 'dark' : 'light',
     primary: {
+      light: '#000000',
       main: '#000000',
+      dark: '#ffffff',
     },
     secondary: {
       main: '#ffffff',
@@ -18,6 +17,18 @@ const theme = createMuiTheme({
     },
     background: {
       default: isDark ? '#121212' : '#ffffff',
+    },
+  },
+  overrides: {
+    MuiAppBar: {
+      root: {
+        boxShadow: 'none',
+      },
+    },
+    MuiButton: {
+      root: {
+        borderRadius: 0,
+      },
     },
   },
 });

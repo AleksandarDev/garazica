@@ -9,3 +9,9 @@
 .title {
     flex-grow: 1;
 }
+
+.themeToggleButton {
+    .MuiToggleButton {
+        border-radius: 0;
+    }
+}

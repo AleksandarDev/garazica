@@ -5,6 +5,7 @@ const withPWA = require('next-pwa');
 const imagesCongfig = [withImages];
 const pwaConfig = [withPWA, {
   pwa: {
+    disable: true,
     dest: 'public',
   },
 }];
