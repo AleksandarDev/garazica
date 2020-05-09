@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import anime from "animejs";
-import CoverImageDay from "../public/CoverDay.svg";
-import CoverImageNight from "../public/CoverNight.svg";
+import CoverImageDay from "../design/cover/CoverDay.svg";
+import CoverImageNight from "../design/cover/CoverNight.svg";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';

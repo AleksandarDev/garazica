@@ -5,11 +5,8 @@ import theme from '../src/theme';
 
 export default class MyDocument extends Document {
   render() {
-    const hours = new Date().getHours()
-    const isDayTime = hours > 6 && hours < 20
-
     return (
-      <Html lang="hr" className={clsx(!isDayTime && "night")}>
+      <Html lang="hr">
         <Head>
           <meta charset="utf-8" />
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
