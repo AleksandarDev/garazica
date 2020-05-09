@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import anime from "animejs";
-import CoverImage from "../public/CoverDay.svg";
+import CoverImageDay from "../public/CoverDay.svg";
+import CoverImageNight from "../public/CoverNight.svg";
 import { Head } from "next/document";
 
 export default function Home() {
@@ -29,6 +30,11 @@ export default function Home() {
       );
     }
   }, []);
+
+  const hours = new Date().getHours()
+  const isDayTime = hours > 6 && hours < 20
+
+  const CoverImage = isDayTime ? CoverImageDay : CoverImageNight;
 
   return (
     <div>

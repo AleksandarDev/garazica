@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
+import clsx from 'clsx';
 
 export default class AppDocument extends Document {
     static async getInitialProps(ctx) {
@@ -7,8 +8,12 @@ export default class AppDocument extends Document {
       }
 
   render() {
+
+    const hours = new Date().getHours()
+    const isDayTime = hours > 6 && hours < 20
+
     return (
-      <Html lang="hr">
+      <Html lang="hr" className={clsx(!isDayTime && "night")}>
         <Head>
           <meta charset="utf-8" />
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
