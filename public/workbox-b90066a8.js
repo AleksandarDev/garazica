@@ -1,17 +1,16 @@
-define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
+define('./workbox-b90066a8.js', ['exports'], (exports) => {
+  try {
+    self['workbox:core:5.1.3'] && _();
+  } catch (e) {}
 
-    try {
-      self['workbox:core:5.1.3'] && _();
-    } catch (e) {}
-
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Force a service worker to activate immediately, instead of
      * [waiting](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#waiting)
      * for existing clients to close.
@@ -19,81 +18,69 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-core
      */
 
-    function skipWaiting() {
-      // We need to explicitly call `self.skipWaiting()` here because we're
-      // shadowing `skipWaiting` with this local function.
-      self.addEventListener('install', () => self.skipWaiting());
-    }
+  function skipWaiting() {
+    // We need to explicitly call `self.skipWaiting()` here because we're
+    // shadowing `skipWaiting` with this local function.
+    self.addEventListener('install', () => self.skipWaiting());
+  }
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Claim any currently available clients once the service worker
      * becomes active. This is normally used in conjunction with `skipWaiting()`.
      *
      * @memberof module:workbox-core
      */
 
-    function clientsClaim() {
-      self.addEventListener('activate', () => self.clients.claim());
+  function clientsClaim() {
+    self.addEventListener('activate', () => self.clients.claim());
+  }
+
+  /*
+      Copyright 2018 Google LLC
+
+      Use of this source code is governed by an MIT-style
+      license that can be found in the LICENSE file or at
+      https://opensource.org/licenses/MIT.
+    */
+  const _cacheNameDetails = {
+    googleAnalytics: 'googleAnalytics',
+    precache: 'precache-v2',
+    prefix: 'workbox',
+    runtime: 'runtime',
+    suffix: typeof registration !== 'undefined' ? registration.scope : '',
+  };
+
+  const _createCacheName = (cacheName) => [_cacheNameDetails.prefix, cacheName, _cacheNameDetails.suffix].filter((value) => value && value.length > 0).join('-');
+
+  const eachCacheNameDetail = (fn) => {
+    for (const key of Object.keys(_cacheNameDetails)) {
+      fn(key);
     }
+  };
 
-    /*
-      Copyright 2018 Google LLC
+  const cacheNames = {
+    updateDetails: (details) => {
+      eachCacheNameDetail((key) => {
+        if (typeof details[key] === 'string') {
+          _cacheNameDetails[key] = details[key];
+        }
+      });
+    },
+    getGoogleAnalyticsName: (userCacheName) => userCacheName || _createCacheName(_cacheNameDetails.googleAnalytics),
+    getPrecacheName: (userCacheName) => userCacheName || _createCacheName(_cacheNameDetails.precache),
+    getPrefix: () => _cacheNameDetails.prefix,
+    getRuntimeName: (userCacheName) => userCacheName || _createCacheName(_cacheNameDetails.runtime),
+    getSuffix: () => _cacheNameDetails.suffix,
+  };
 
-      Use of this source code is governed by an MIT-style
-      license that can be found in the LICENSE file or at
-      https://opensource.org/licenses/MIT.
-    */
-    const _cacheNameDetails = {
-      googleAnalytics: 'googleAnalytics',
-      precache: 'precache-v2',
-      prefix: 'workbox',
-      runtime: 'runtime',
-      suffix: typeof registration !== 'undefined' ? registration.scope : ''
-    };
-
-    const _createCacheName = cacheName => {
-      return [_cacheNameDetails.prefix, cacheName, _cacheNameDetails.suffix].filter(value => value && value.length > 0).join('-');
-    };
-
-    const eachCacheNameDetail = fn => {
-      for (const key of Object.keys(_cacheNameDetails)) {
-        fn(key);
-      }
-    };
-
-    const cacheNames = {
-      updateDetails: details => {
-        eachCacheNameDetail(key => {
-          if (typeof details[key] === 'string') {
-            _cacheNameDetails[key] = details[key];
-          }
-        });
-      },
-      getGoogleAnalyticsName: userCacheName => {
-        return userCacheName || _createCacheName(_cacheNameDetails.googleAnalytics);
-      },
-      getPrecacheName: userCacheName => {
-        return userCacheName || _createCacheName(_cacheNameDetails.precache);
-      },
-      getPrefix: () => {
-        return _cacheNameDetails.prefix;
-      },
-      getRuntimeName: userCacheName => {
-        return userCacheName || _createCacheName(_cacheNameDetails.runtime);
-      },
-      getSuffix: () => {
-        return _cacheNameDetails.suffix;
-      }
-    };
-
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
@@ -101,352 +88,312 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
 
-    const getFriendlyURL = url => {
-      const urlObj = new URL(String(url), location.href); // See https://github.com/GoogleChrome/workbox/issues/2323
-      // We want to include everything, except for the origin if it's same-origin.
+  const getFriendlyURL = (url) => {
+    const urlObj = new URL(String(url), location.href); // See https://github.com/GoogleChrome/workbox/issues/2323
+    // We want to include everything, except for the origin if it's same-origin.
 
-      return urlObj.href.replace(new RegExp(`^${location.origin}`), '');
-    };
+    return urlObj.href.replace(new RegExp(`^${location.origin}`), '');
+  };
 
-    /*
+  /*
       Copyright 2019 Google LLC
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const logger =  (() => {
-      // Don't overwrite this value if it's already set.
-      // See https://github.com/GoogleChrome/workbox/pull/2284#issuecomment-560470923
-      if (!('__WB_DISABLE_DEV_LOGS' in self)) {
-        self.__WB_DISABLE_DEV_LOGS = false;
+  const logger = (() => {
+    // Don't overwrite this value if it's already set.
+    // See https://github.com/GoogleChrome/workbox/pull/2284#issuecomment-560470923
+    if (!('__WB_DISABLE_DEV_LOGS' in self)) {
+      self.__WB_DISABLE_DEV_LOGS = false;
+    }
+
+    let inGroup = false;
+    const methodToColorMap = {
+      debug: '#7f8c8d',
+      log: '#2ecc71',
+      warn: '#f39c12',
+      error: '#c0392b',
+      groupCollapsed: '#3498db',
+      groupEnd: null,
+    };
+
+    const print = function (method, args) {
+      if (self.__WB_DISABLE_DEV_LOGS) {
+        return;
       }
 
-      let inGroup = false;
-      const methodToColorMap = {
-        debug: `#7f8c8d`,
-        log: `#2ecc71`,
-        warn: `#f39c12`,
-        error: `#c0392b`,
-        groupCollapsed: `#3498db`,
-        groupEnd: null
-      };
-
-      const print = function (method, args) {
-        if (self.__WB_DISABLE_DEV_LOGS) {
+      if (method === 'groupCollapsed') {
+        // Safari doesn't print all console.groupCollapsed() arguments:
+        // https://bugs.webkit.org/show_bug.cgi?id=182754
+        if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+          console[method](...args);
           return;
         }
+      }
 
-        if (method === 'groupCollapsed') {
-          // Safari doesn't print all console.groupCollapsed() arguments:
-          // https://bugs.webkit.org/show_bug.cgi?id=182754
-          if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-            console[method](...args);
-            return;
-          }
-        }
+      const styles = [`background: ${methodToColorMap[method]}`, 'border-radius: 0.5em', 'color: white', 'font-weight: bold', 'padding: 2px 0.5em']; // When in a group, the workbox prefix is not displayed.
 
-        const styles = [`background: ${methodToColorMap[method]}`, `border-radius: 0.5em`, `color: white`, `font-weight: bold`, `padding: 2px 0.5em`]; // When in a group, the workbox prefix is not displayed.
+      const logPrefix = inGroup ? [] : ['%cworkbox', styles.join(';')];
+      console[method](...logPrefix, ...args);
 
-        const logPrefix = inGroup ? [] : ['%cworkbox', styles.join(';')];
-        console[method](...logPrefix, ...args);
+      if (method === 'groupCollapsed') {
+        inGroup = true;
+      }
 
-        if (method === 'groupCollapsed') {
-          inGroup = true;
-        }
+      if (method === 'groupEnd') {
+        inGroup = false;
+      }
+    };
 
-        if (method === 'groupEnd') {
-          inGroup = false;
-        }
+    const api = {};
+    const loggerMethods = Object.keys(methodToColorMap);
+
+    for (const key of loggerMethods) {
+      const method = key;
+
+      api[method] = (...args) => {
+        print(method, args);
       };
+    }
 
-      const api = {};
-      const loggerMethods = Object.keys(methodToColorMap);
+    return api;
+  })();
 
-      for (const key of loggerMethods) {
-        const method = key;
-
-        api[method] = (...args) => {
-          print(method, args);
-        };
-      }
-
-      return api;
-    })();
-
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const messages = {
-      'invalid-value': ({
-        paramName,
-        validValueDescription,
-        value
-      }) => {
-        if (!paramName || !validValueDescription) {
-          throw new Error(`Unexpected input to 'invalid-value' error.`);
-        }
-
-        return `The '${paramName}' parameter was given a value with an ` + `unexpected value. ${validValueDescription} Received a value of ` + `${JSON.stringify(value)}.`;
-      },
-      'not-an-array': ({
-        moduleName,
-        className,
-        funcName,
-        paramName
-      }) => {
-        if (!moduleName || !className || !funcName || !paramName) {
-          throw new Error(`Unexpected input to 'not-an-array' error.`);
-        }
-
-        return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className}.${funcName}()' must be an array.`;
-      },
-      'incorrect-type': ({
-        expectedType,
-        paramName,
-        moduleName,
-        className,
-        funcName
-      }) => {
-        if (!expectedType || !paramName || !moduleName || !funcName) {
-          throw new Error(`Unexpected input to 'incorrect-type' error.`);
-        }
-
-        return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? className + '.' : ''}` + `${funcName}()' must be of type ${expectedType}.`;
-      },
-      'incorrect-class': ({
-        expectedClass,
-        paramName,
-        moduleName,
-        className,
-        funcName,
-        isReturnValueProblem
-      }) => {
-        if (!expectedClass || !moduleName || !funcName) {
-          throw new Error(`Unexpected input to 'incorrect-class' error.`);
-        }
-
-        if (isReturnValueProblem) {
-          return `The return value from ` + `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
-        }
-
-        return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? className + '.' : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
-      },
-      'missing-a-method': ({
-        expectedMethod,
-        paramName,
-        moduleName,
-        className,
-        funcName
-      }) => {
-        if (!expectedMethod || !paramName || !moduleName || !className || !funcName) {
-          throw new Error(`Unexpected input to 'missing-a-method' error.`);
-        }
-
-        return `${moduleName}.${className}.${funcName}() expected the ` + `'${paramName}' parameter to expose a '${expectedMethod}' method.`;
-      },
-      'add-to-cache-list-unexpected-type': ({
-        entry
-      }) => {
-        return `An unexpected entry was passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' The entry ` + `'${JSON.stringify(entry)}' isn't supported. You must supply an array of ` + `strings with one or more characters, objects with a url property or ` + `Request objects.`;
-      },
-      'add-to-cache-list-conflicting-entries': ({
-        firstEntry,
-        secondEntry
-      }) => {
-        if (!firstEntry || !secondEntry) {
-          throw new Error(`Unexpected input to ` + `'add-to-cache-list-duplicate-entries' error.`);
-        }
-
-        return `Two of the entries passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' had the URL ` + `${firstEntry._entryId} but different revision details. Workbox is ` + `unable to cache and version the asset correctly. Please remove one ` + `of the entries.`;
-      },
-      'plugin-error-request-will-fetch': ({
-        thrownError
-      }) => {
-        if (!thrownError) {
-          throw new Error(`Unexpected input to ` + `'plugin-error-request-will-fetch', error.`);
-        }
-
-        return `An error was thrown by a plugins 'requestWillFetch()' method. ` + `The thrown error message was: '${thrownError.message}'.`;
-      },
-      'invalid-cache-name': ({
-        cacheNameId,
-        value
-      }) => {
-        if (!cacheNameId) {
-          throw new Error(`Expected a 'cacheNameId' for error 'invalid-cache-name'`);
-        }
-
-        return `You must provide a name containing at least one character for ` + `setCacheDetails({${cacheNameId}: '...'}). Received a value of ` + `'${JSON.stringify(value)}'`;
-      },
-      'unregister-route-but-not-found-with-method': ({
-        method
-      }) => {
-        if (!method) {
-          throw new Error(`Unexpected input to ` + `'unregister-route-but-not-found-with-method' error.`);
-        }
-
-        return `The route you're trying to unregister was not  previously ` + `registered for the method type '${method}'.`;
-      },
-      'unregister-route-route-not-registered': () => {
-        return `The route you're trying to unregister was not previously ` + `registered.`;
-      },
-      'queue-replay-failed': ({
-        name
-      }) => {
-        return `Replaying the background sync queue '${name}' failed.`;
-      },
-      'duplicate-queue-name': ({
-        name
-      }) => {
-        return `The Queue name '${name}' is already being used. ` + `All instances of backgroundSync.Queue must be given unique names.`;
-      },
-      'expired-test-without-max-age': ({
-        methodName,
-        paramName
-      }) => {
-        return `The '${methodName}()' method can only be used when the ` + `'${paramName}' is used in the constructor.`;
-      },
-      'unsupported-route-type': ({
-        moduleName,
-        className,
-        funcName,
-        paramName
-      }) => {
-        return `The supplied '${paramName}' parameter was an unsupported type. ` + `Please check the docs for ${moduleName}.${className}.${funcName} for ` + `valid input types.`;
-      },
-      'not-array-of-class': ({
-        value,
-        expectedClass,
-        moduleName,
-        className,
-        funcName,
-        paramName
-      }) => {
-        return `The supplied '${paramName}' parameter must be an array of ` + `'${expectedClass}' objects. Received '${JSON.stringify(value)},'. ` + `Please check the call to ${moduleName}.${className}.${funcName}() ` + `to fix the issue.`;
-      },
-      'max-entries-or-age-required': ({
-        moduleName,
-        className,
-        funcName
-      }) => {
-        return `You must define either config.maxEntries or config.maxAgeSeconds` + `in ${moduleName}.${className}.${funcName}`;
-      },
-      'statuses-or-headers-required': ({
-        moduleName,
-        className,
-        funcName
-      }) => {
-        return `You must define either config.statuses or config.headers` + `in ${moduleName}.${className}.${funcName}`;
-      },
-      'invalid-string': ({
-        moduleName,
-        funcName,
-        paramName
-      }) => {
-        if (!paramName || !moduleName || !funcName) {
-          throw new Error(`Unexpected input to 'invalid-string' error.`);
-        }
-
-        return `When using strings, the '${paramName}' parameter must start with ` + `'http' (for cross-origin matches) or '/' (for same-origin matches). ` + `Please see the docs for ${moduleName}.${funcName}() for ` + `more info.`;
-      },
-      'channel-name-required': () => {
-        return `You must provide a channelName to construct a ` + `BroadcastCacheUpdate instance.`;
-      },
-      'invalid-responses-are-same-args': () => {
-        return `The arguments passed into responsesAreSame() appear to be ` + `invalid. Please ensure valid Responses are used.`;
-      },
-      'expire-custom-caches-only': () => {
-        return `You must provide a 'cacheName' property when using the ` + `expiration plugin with a runtime caching strategy.`;
-      },
-      'unit-must-be-bytes': ({
-        normalizedRangeHeader
-      }) => {
-        if (!normalizedRangeHeader) {
-          throw new Error(`Unexpected input to 'unit-must-be-bytes' error.`);
-        }
-
-        return `The 'unit' portion of the Range header must be set to 'bytes'. ` + `The Range header provided was "${normalizedRangeHeader}"`;
-      },
-      'single-range-only': ({
-        normalizedRangeHeader
-      }) => {
-        if (!normalizedRangeHeader) {
-          throw new Error(`Unexpected input to 'single-range-only' error.`);
-        }
-
-        return `Multiple ranges are not supported. Please use a  single start ` + `value, and optional end value. The Range header provided was ` + `"${normalizedRangeHeader}"`;
-      },
-      'invalid-range-values': ({
-        normalizedRangeHeader
-      }) => {
-        if (!normalizedRangeHeader) {
-          throw new Error(`Unexpected input to 'invalid-range-values' error.`);
-        }
-
-        return `The Range header is missing both start and end values. At least ` + `one of those values is needed. The Range header provided was ` + `"${normalizedRangeHeader}"`;
-      },
-      'no-range-header': () => {
-        return `No Range header was found in the Request provided.`;
-      },
-      'range-not-satisfiable': ({
-        size,
-        start,
-        end
-      }) => {
-        return `The start (${start}) and end (${end}) values in the Range are ` + `not satisfiable by the cached response, which is ${size} bytes.`;
-      },
-      'attempt-to-cache-non-get-request': ({
-        url,
-        method
-      }) => {
-        return `Unable to cache '${url}' because it is a '${method}' request and ` + `only 'GET' requests can be cached.`;
-      },
-      'cache-put-with-no-response': ({
-        url
-      }) => {
-        return `There was an attempt to cache '${url}' but the response was not ` + `defined.`;
-      },
-      'no-response': ({
-        url,
-        error
-      }) => {
-        let message = `The strategy could not generate a response for '${url}'.`;
-
-        if (error) {
-          message += ` The underlying error is ${error}.`;
-        }
-
-        return message;
-      },
-      'bad-precaching-response': ({
-        url,
-        status
-      }) => {
-        return `The precaching request for '${url}' failed with an HTTP ` + `status of ${status}.`;
-      },
-      'non-precached-url': ({
-        url
-      }) => {
-        return `createHandlerBoundToURL('${url}') was called, but that URL is ` + `not precached. Please pass in a URL that is precached instead.`;
-      },
-      'add-to-cache-list-conflicting-integrities': ({
-        url
-      }) => {
-        return `Two of the entries passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' had the URL ` + `${url} with different integrity values. Please remove one of them.`;
-      },
-      'missing-precache-entry': ({
-        cacheName,
-        url
-      }) => {
-        return `Unable to find a precached response in ${cacheName} for ${url}.`;
+  const messages = {
+    'invalid-value': ({
+      paramName,
+      validValueDescription,
+      value,
+    }) => {
+      if (!paramName || !validValueDescription) {
+        throw new Error('Unexpected input to \'invalid-value\' error.');
       }
-    };
 
-    /*
+      return `The '${paramName}' parameter was given a value with an ` + `unexpected value. ${validValueDescription} Received a value of ` + `${JSON.stringify(value)}.`;
+    },
+    'not-an-array': ({
+      moduleName,
+      className,
+      funcName,
+      paramName,
+    }) => {
+      if (!moduleName || !className || !funcName || !paramName) {
+        throw new Error('Unexpected input to \'not-an-array\' error.');
+      }
+
+      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className}.${funcName}()' must be an array.`;
+    },
+    'incorrect-type': ({
+      expectedType,
+      paramName,
+      moduleName,
+      className,
+      funcName,
+    }) => {
+      if (!expectedType || !paramName || !moduleName || !funcName) {
+        throw new Error('Unexpected input to \'incorrect-type\' error.');
+      }
+
+      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? `${className}.` : ''}` + `${funcName}()' must be of type ${expectedType}.`;
+    },
+    'incorrect-class': ({
+      expectedClass,
+      paramName,
+      moduleName,
+      className,
+      funcName,
+      isReturnValueProblem,
+    }) => {
+      if (!expectedClass || !moduleName || !funcName) {
+        throw new Error('Unexpected input to \'incorrect-class\' error.');
+      }
+
+      if (isReturnValueProblem) {
+        return 'The return value from ' + `'${moduleName}.${className ? `${className}.` : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
+      }
+
+      return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className ? `${className}.` : ''}${funcName}()' ` + `must be an instance of class ${expectedClass.name}.`;
+    },
+    'missing-a-method': ({
+      expectedMethod,
+      paramName,
+      moduleName,
+      className,
+      funcName,
+    }) => {
+      if (!expectedMethod || !paramName || !moduleName || !className || !funcName) {
+        throw new Error('Unexpected input to \'missing-a-method\' error.');
+      }
+
+      return `${moduleName}.${className}.${funcName}() expected the ` + `'${paramName}' parameter to expose a '${expectedMethod}' method.`;
+    },
+    'add-to-cache-list-unexpected-type': ({
+      entry,
+    }) => 'An unexpected entry was passed to ' + '\'workbox-precaching.PrecacheController.addToCacheList()\' The entry ' + `'${JSON.stringify(entry)}' isn't supported. You must supply an array of ` + 'strings with one or more characters, objects with a url property or ' + 'Request objects.',
+    'add-to-cache-list-conflicting-entries': ({
+      firstEntry,
+      secondEntry,
+    }) => {
+      if (!firstEntry || !secondEntry) {
+        throw new Error('Unexpected input to ' + '\'add-to-cache-list-duplicate-entries\' error.');
+      }
+
+      return 'Two of the entries passed to ' + '\'workbox-precaching.PrecacheController.addToCacheList()\' had the URL ' + `${firstEntry._entryId} but different revision details. Workbox is ` + 'unable to cache and version the asset correctly. Please remove one ' + 'of the entries.';
+    },
+    'plugin-error-request-will-fetch': ({
+      thrownError,
+    }) => {
+      if (!thrownError) {
+        throw new Error('Unexpected input to ' + '\'plugin-error-request-will-fetch\', error.');
+      }
+
+      return 'An error was thrown by a plugins \'requestWillFetch()\' method. ' + `The thrown error message was: '${thrownError.message}'.`;
+    },
+    'invalid-cache-name': ({
+      cacheNameId,
+      value,
+    }) => {
+      if (!cacheNameId) {
+        throw new Error('Expected a \'cacheNameId\' for error \'invalid-cache-name\'');
+      }
+
+      return 'You must provide a name containing at least one character for ' + `setCacheDetails({${cacheNameId}: '...'}). Received a value of ` + `'${JSON.stringify(value)}'`;
+    },
+    'unregister-route-but-not-found-with-method': ({
+      method,
+    }) => {
+      if (!method) {
+        throw new Error('Unexpected input to ' + '\'unregister-route-but-not-found-with-method\' error.');
+      }
+
+      return 'The route you\'re trying to unregister was not  previously ' + `registered for the method type '${method}'.`;
+    },
+    'unregister-route-route-not-registered': () => 'The route you\'re trying to unregister was not previously ' + 'registered.',
+    'queue-replay-failed': ({
+      name,
+    }) => `Replaying the background sync queue '${name}' failed.`,
+    'duplicate-queue-name': ({
+      name,
+    }) => `The Queue name '${name}' is already being used. ` + 'All instances of backgroundSync.Queue must be given unique names.',
+    'expired-test-without-max-age': ({
+      methodName,
+      paramName,
+    }) => `The '${methodName}()' method can only be used when the ` + `'${paramName}' is used in the constructor.`,
+    'unsupported-route-type': ({
+      moduleName,
+      className,
+      funcName,
+      paramName,
+    }) => `The supplied '${paramName}' parameter was an unsupported type. ` + `Please check the docs for ${moduleName}.${className}.${funcName} for ` + 'valid input types.',
+    'not-array-of-class': ({
+      value,
+      expectedClass,
+      moduleName,
+      className,
+      funcName,
+      paramName,
+    }) => `The supplied '${paramName}' parameter must be an array of ` + `'${expectedClass}' objects. Received '${JSON.stringify(value)},'. ` + `Please check the call to ${moduleName}.${className}.${funcName}() ` + 'to fix the issue.',
+    'max-entries-or-age-required': ({
+      moduleName,
+      className,
+      funcName,
+    }) => 'You must define either config.maxEntries or config.maxAgeSeconds' + `in ${moduleName}.${className}.${funcName}`,
+    'statuses-or-headers-required': ({
+      moduleName,
+      className,
+      funcName,
+    }) => 'You must define either config.statuses or config.headers' + `in ${moduleName}.${className}.${funcName}`,
+    'invalid-string': ({
+      moduleName,
+      funcName,
+      paramName,
+    }) => {
+      if (!paramName || !moduleName || !funcName) {
+        throw new Error('Unexpected input to \'invalid-string\' error.');
+      }
+
+      return `When using strings, the '${paramName}' parameter must start with ` + '\'http\' (for cross-origin matches) or \'/\' (for same-origin matches). ' + `Please see the docs for ${moduleName}.${funcName}() for ` + 'more info.';
+    },
+    'channel-name-required': () => 'You must provide a channelName to construct a ' + 'BroadcastCacheUpdate instance.',
+    'invalid-responses-are-same-args': () => 'The arguments passed into responsesAreSame() appear to be ' + 'invalid. Please ensure valid Responses are used.',
+    'expire-custom-caches-only': () => 'You must provide a \'cacheName\' property when using the ' + 'expiration plugin with a runtime caching strategy.',
+    'unit-must-be-bytes': ({
+      normalizedRangeHeader,
+    }) => {
+      if (!normalizedRangeHeader) {
+        throw new Error('Unexpected input to \'unit-must-be-bytes\' error.');
+      }
+
+      return 'The \'unit\' portion of the Range header must be set to \'bytes\'. ' + `The Range header provided was "${normalizedRangeHeader}"`;
+    },
+    'single-range-only': ({
+      normalizedRangeHeader,
+    }) => {
+      if (!normalizedRangeHeader) {
+        throw new Error('Unexpected input to \'single-range-only\' error.');
+      }
+
+      return 'Multiple ranges are not supported. Please use a  single start ' + 'value, and optional end value. The Range header provided was ' + `"${normalizedRangeHeader}"`;
+    },
+    'invalid-range-values': ({
+      normalizedRangeHeader,
+    }) => {
+      if (!normalizedRangeHeader) {
+        throw new Error('Unexpected input to \'invalid-range-values\' error.');
+      }
+
+      return 'The Range header is missing both start and end values. At least ' + 'one of those values is needed. The Range header provided was ' + `"${normalizedRangeHeader}"`;
+    },
+    'no-range-header': () => 'No Range header was found in the Request provided.',
+    'range-not-satisfiable': ({
+      size,
+      start,
+      end,
+    }) => `The start (${start}) and end (${end}) values in the Range are ` + `not satisfiable by the cached response, which is ${size} bytes.`,
+    'attempt-to-cache-non-get-request': ({
+      url,
+      method,
+    }) => `Unable to cache '${url}' because it is a '${method}' request and ` + 'only \'GET\' requests can be cached.',
+    'cache-put-with-no-response': ({
+      url,
+    }) => `There was an attempt to cache '${url}' but the response was not ` + 'defined.',
+    'no-response': ({
+      url,
+      error,
+    }) => {
+      let message = `The strategy could not generate a response for '${url}'.`;
+
+      if (error) {
+        message += ` The underlying error is ${error}.`;
+      }
+
+      return message;
+    },
+    'bad-precaching-response': ({
+      url,
+      status,
+    }) => `The precaching request for '${url}' failed with an HTTP ` + `status of ${status}.`,
+    'non-precached-url': ({
+      url,
+    }) => `createHandlerBoundToURL('${url}') was called, but that URL is ` + 'not precached. Please pass in a URL that is precached instead.',
+    'add-to-cache-list-conflicting-integrities': ({
+      url,
+    }) => 'Two of the entries passed to ' + '\'workbox-precaching.PrecacheController.addToCacheList()\' had the URL ' + `${url} with different integrity values. Please remove one of them.`,
+    'missing-precache-entry': ({
+      cacheName,
+      url,
+    }) => `Unable to find a precached response in ${cacheName} for ${url}.`,
+  };
+
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
@@ -454,26 +401,26 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
 
-    const generatorFunction = (code, details = {}) => {
-      const message = messages[code];
+  const generatorFunction = (code, details = {}) => {
+    const message = messages[code];
 
-      if (!message) {
-        throw new Error(`Unable to find message for code '${code}'.`);
-      }
+    if (!message) {
+      throw new Error(`Unable to find message for code '${code}'.`);
+    }
 
-      return message(details);
-    };
+    return message(details);
+  };
 
-    const messageGenerator =  generatorFunction;
+  const messageGenerator = generatorFunction;
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Workbox errors should be thrown with this class.
      * This allows use to ensure the type easily in tests,
      * helps developers identify errors from workbox
@@ -483,8 +430,8 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @private
      */
 
-    class WorkboxError extends Error {
-      /**
+  class WorkboxError extends Error {
+    /**
        *
        * @param {string} errorCode The error code that
        * identifies this particular error.
@@ -492,89 +439,88 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        * that will help developers identify issues should
        * be added as a key on the context object.
        */
-      constructor(errorCode, details) {
-        const message = messageGenerator(errorCode, details);
-        super(message);
-        this.name = errorCode;
-        this.details = details;
-      }
-
+    constructor(errorCode, details) {
+      const message = messageGenerator(errorCode, details);
+      super(message);
+      this.name = errorCode;
+      this.details = details;
     }
+  }
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /*
+  /*
      * This method throws if the supplied value is not an array.
      * The destructed values are required to produce a meaningful error for users.
      * The destructed and restructured object is so it's clear what is
      * needed.
      */
 
-    const isArray = (value, details) => {
-      if (!Array.isArray(value)) {
-        throw new WorkboxError('not-an-array', details);
-      }
-    };
+  const isArray = (value, details) => {
+    if (!Array.isArray(value)) {
+      throw new WorkboxError('not-an-array', details);
+    }
+  };
 
-    const hasMethod = (object, expectedMethod, details) => {
-      const type = typeof object[expectedMethod];
+  const hasMethod = (object, expectedMethod, details) => {
+    const type = typeof object[expectedMethod];
 
-      if (type !== 'function') {
-        details['expectedMethod'] = expectedMethod;
-        throw new WorkboxError('missing-a-method', details);
-      }
-    };
+    if (type !== 'function') {
+      details.expectedMethod = expectedMethod;
+      throw new WorkboxError('missing-a-method', details);
+    }
+  };
 
-    const isType = (object, expectedType, details) => {
-      if (typeof object !== expectedType) {
-        details['expectedType'] = expectedType;
-        throw new WorkboxError('incorrect-type', details);
-      }
-    };
+  const isType = (object, expectedType, details) => {
+    if (typeof object !== expectedType) {
+      details.expectedType = expectedType;
+      throw new WorkboxError('incorrect-type', details);
+    }
+  };
 
-    const isInstance = (object, expectedClass, details) => {
-      if (!(object instanceof expectedClass)) {
-        details['expectedClass'] = expectedClass;
-        throw new WorkboxError('incorrect-class', details);
-      }
-    };
+  const isInstance = (object, expectedClass, details) => {
+    if (!(object instanceof expectedClass)) {
+      details.expectedClass = expectedClass;
+      throw new WorkboxError('incorrect-class', details);
+    }
+  };
 
-    const isOneOf = (value, validValues, details) => {
-      if (!validValues.includes(value)) {
-        details['validValueDescription'] = `Valid values are ${JSON.stringify(validValues)}.`;
-        throw new WorkboxError('invalid-value', details);
-      }
-    };
+  const isOneOf = (value, validValues, details) => {
+    if (!validValues.includes(value)) {
+      details.validValueDescription = `Valid values are ${JSON.stringify(validValues)}.`;
+      throw new WorkboxError('invalid-value', details);
+    }
+  };
 
-    const isArrayOfClass = (value, expectedClass, details) => {
-      const error = new WorkboxError('not-array-of-class', details);
+  const isArrayOfClass = (value, expectedClass, details) => {
+    const error = new WorkboxError('not-array-of-class', details);
 
-      if (!Array.isArray(value)) {
+    if (!Array.isArray(value)) {
+      throw error;
+    }
+
+    for (const item of value) {
+      if (!(item instanceof expectedClass)) {
         throw error;
       }
+    }
+  };
 
-      for (const item of value) {
-        if (!(item instanceof expectedClass)) {
-          throw error;
-        }
-      }
-    };
+  const finalAssertExports = {
+    hasMethod,
+    isArray,
+    isInstance,
+    isOneOf,
+    isType,
+    isArrayOfClass,
+  };
 
-    const finalAssertExports =  {
-      hasMethod,
-      isArray,
-      isInstance,
-      isOneOf,
-      isType,
-      isArrayOfClass
-    };
-
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
@@ -582,16 +528,16 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
 
-    const quotaErrorCallbacks = new Set();
+  const quotaErrorCallbacks = new Set();
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Runs all of the callback functions, one at a time sequentially, in the order
      * in which they were registered.
      *
@@ -599,45 +545,43 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @private
      */
 
-    async function executeQuotaErrorCallbacks() {
-      {
-        logger.log(`About to run ${quotaErrorCallbacks.size} ` + `callbacks to clean up caches.`);
-      }
+  async function executeQuotaErrorCallbacks() {
+    {
+      logger.log(`About to run ${quotaErrorCallbacks.size} ` + 'callbacks to clean up caches.');
+    }
 
-      for (const callback of quotaErrorCallbacks) {
-        await callback();
-
-        {
-          logger.log(callback, 'is complete.');
-        }
-      }
+    for (const callback of quotaErrorCallbacks) {
+      await callback();
 
       {
-        logger.log('Finished running callbacks.');
+        logger.log(callback, 'is complete.');
       }
     }
 
-    /*
+    {
+      logger.log('Finished running callbacks.');
+    }
+  }
+
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const pluginUtils = {
-      filter: (plugins, callbackName) => {
-        return plugins.filter(plugin => callbackName in plugin);
-      }
-    };
+  const pluginUtils = {
+    filter: (plugins, callbackName) => plugins.filter((plugin) => callbackName in plugin),
+  };
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Checks the list of plugins for the cacheKeyWillBeUsed callback, and
      * executes any of those callbacks found in sequence. The final `Request` object
      * returned by the last plugin is treated as the cache key for cache reads
@@ -653,41 +597,40 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-core
      */
 
-    const _getEffectiveRequest = async ({
-      request,
-      mode,
-      plugins = []
-    }) => {
-      const cacheKeyWillBeUsedPlugins = pluginUtils.filter(plugins, "cacheKeyWillBeUsed"
+  const _getEffectiveRequest = async ({
+    request,
+    mode,
+    plugins = [],
+  }) => {
+    const cacheKeyWillBeUsedPlugins = pluginUtils.filter(plugins, 'cacheKeyWillBeUsed',
       /* CACHE_KEY_WILL_BE_USED */
-      );
-      let effectiveRequest = request;
+    );
+    let effectiveRequest = request;
 
-      for (const plugin of cacheKeyWillBeUsedPlugins) {
-        effectiveRequest = await plugin["cacheKeyWillBeUsed"
-        /* CACHE_KEY_WILL_BE_USED */
-        ].call(plugin, {
-          mode,
-          request: effectiveRequest
-        });
+    for (const plugin of cacheKeyWillBeUsedPlugins) {
+      effectiveRequest = await plugin['cacheKeyWillBeUsed'
+      /* CACHE_KEY_WILL_BE_USED */
+      ].call(plugin, {
+        mode,
+        request: effectiveRequest,
+      });
 
-        if (typeof effectiveRequest === 'string') {
-          effectiveRequest = new Request(effectiveRequest);
-        }
-
-        {
-          finalAssertExports.isInstance(effectiveRequest, Request, {
-            moduleName: 'Plugin',
-            funcName: "cacheKeyWillBeUsed"
-            /* CACHE_KEY_WILL_BE_USED */
-            ,
-            isReturnValueProblem: true
-          });
-        }
+      if (typeof effectiveRequest === 'string') {
+        effectiveRequest = new Request(effectiveRequest);
       }
 
-      return effectiveRequest;
-    };
+      {
+        finalAssertExports.isInstance(effectiveRequest, Request, {
+          moduleName: 'Plugin',
+          funcName: 'cacheKeyWillBeUsed', /* CACHE_KEY_WILL_BE_USED */
+
+          isReturnValueProblem: true,
+        });
+      }
+    }
+
+    return effectiveRequest;
+  };
     /**
      * This method will call cacheWillUpdate on the available plugins (or use
      * status === 200) to determine if the Response is safe and valid to cache.
@@ -704,65 +647,64 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    const _isResponseSafeToCache = async ({
-      request,
-      response,
-      event,
-      plugins = []
-    }) => {
-      let responseToCache = response;
-      let pluginsUsed = false;
+  const _isResponseSafeToCache = async ({
+    request,
+    response,
+    event,
+    plugins = [],
+  }) => {
+    let responseToCache = response;
+    let pluginsUsed = false;
 
-      for (const plugin of plugins) {
-        if ("cacheWillUpdate"
+    for (const plugin of plugins) {
+      if ('cacheWillUpdate'
         /* CACHE_WILL_UPDATE */
         in plugin) {
-          pluginsUsed = true;
-          const pluginMethod = plugin["cacheWillUpdate"
-          /* CACHE_WILL_UPDATE */
-          ];
-          responseToCache = await pluginMethod.call(plugin, {
-            request,
-            response: responseToCache,
-            event
-          });
+        pluginsUsed = true;
+        const pluginMethod = plugin['cacheWillUpdate'
+        /* CACHE_WILL_UPDATE */
+        ];
+        responseToCache = await pluginMethod.call(plugin, {
+          request,
+          response: responseToCache,
+          event,
+        });
 
-          {
-            if (responseToCache) {
-              finalAssertExports.isInstance(responseToCache, Response, {
-                moduleName: 'Plugin',
-                funcName: "cacheWillUpdate"
-                /* CACHE_WILL_UPDATE */
-                ,
-                isReturnValueProblem: true
-              });
-            }
-          }
-
-          if (!responseToCache) {
-            break;
-          }
-        }
-      }
-
-      if (!pluginsUsed) {
         {
           if (responseToCache) {
-            if (responseToCache.status !== 200) {
-              if (responseToCache.status === 0) {
-                logger.warn(`The response for '${request.url}' is an opaque ` + `response. The caching strategy that you're using will not ` + `cache opaque responses by default.`);
-              } else {
-                logger.debug(`The response for '${request.url}' returned ` + `a status code of '${response.status}' and won't be cached as a ` + `result.`);
-              }
-            }
+            finalAssertExports.isInstance(responseToCache, Response, {
+              moduleName: 'Plugin',
+              funcName: 'cacheWillUpdate', /* CACHE_WILL_UPDATE */
+
+              isReturnValueProblem: true,
+            });
           }
         }
 
-        responseToCache = responseToCache && responseToCache.status === 200 ? responseToCache : undefined;
+        if (!responseToCache) {
+          break;
+        }
+      }
+    }
+
+    if (!pluginsUsed) {
+      {
+        if (responseToCache) {
+          if (responseToCache.status !== 200) {
+            if (responseToCache.status === 0) {
+              logger.warn(`The response for '${request.url}' is an opaque ` + 'response. The caching strategy that you\'re using will not ' + 'cache opaque responses by default.');
+            } else {
+              logger.debug(`The response for '${request.url}' returned ` + `a status code of '${response.status}' and won't be cached as a ` + 'result.');
+            }
+          }
+        }
       }
 
-      return responseToCache ? responseToCache : null;
-    };
+      responseToCache = responseToCache && responseToCache.status === 200 ? responseToCache : undefined;
+    }
+
+    return responseToCache || null;
+  };
     /**
      * This is a wrapper around cache.match().
      *
@@ -780,60 +722,59 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    const matchWrapper = async ({
-      cacheName,
+  const matchWrapper = async ({
+    cacheName,
+    request,
+    event,
+    matchOptions,
+    plugins = [],
+  }) => {
+    const cache = await self.caches.open(cacheName);
+    const effectiveRequest = await _getEffectiveRequest({
+      plugins,
       request,
-      event,
-      matchOptions,
-      plugins = []
-    }) => {
-      const cache = await self.caches.open(cacheName);
-      const effectiveRequest = await _getEffectiveRequest({
-        plugins,
-        request,
-        mode: 'read'
-      });
-      let cachedResponse = await cache.match(effectiveRequest, matchOptions);
+      mode: 'read',
+    });
+    let cachedResponse = await cache.match(effectiveRequest, matchOptions);
 
-      {
-        if (cachedResponse) {
-          logger.debug(`Found a cached response in '${cacheName}'.`);
-        } else {
-          logger.debug(`No cached response found in '${cacheName}'.`);
-        }
+    {
+      if (cachedResponse) {
+        logger.debug(`Found a cached response in '${cacheName}'.`);
+      } else {
+        logger.debug(`No cached response found in '${cacheName}'.`);
       }
+    }
 
-      for (const plugin of plugins) {
-        if ("cachedResponseWillBeUsed"
+    for (const plugin of plugins) {
+      if ('cachedResponseWillBeUsed'
         /* CACHED_RESPONSE_WILL_BE_USED */
         in plugin) {
-          const pluginMethod = plugin["cachedResponseWillBeUsed"
-          /* CACHED_RESPONSE_WILL_BE_USED */
-          ];
-          cachedResponse = await pluginMethod.call(plugin, {
-            cacheName,
-            event,
-            matchOptions,
-            cachedResponse,
-            request: effectiveRequest
-          });
+        const pluginMethod = plugin['cachedResponseWillBeUsed'
+        /* CACHED_RESPONSE_WILL_BE_USED */
+        ];
+        cachedResponse = await pluginMethod.call(plugin, {
+          cacheName,
+          event,
+          matchOptions,
+          cachedResponse,
+          request: effectiveRequest,
+        });
 
-          {
-            if (cachedResponse) {
-              finalAssertExports.isInstance(cachedResponse, Response, {
-                moduleName: 'Plugin',
-                funcName: "cachedResponseWillBeUsed"
-                /* CACHED_RESPONSE_WILL_BE_USED */
-                ,
-                isReturnValueProblem: true
-              });
-            }
+        {
+          if (cachedResponse) {
+            finalAssertExports.isInstance(cachedResponse, Response, {
+              moduleName: 'Plugin',
+              funcName: 'cachedResponseWillBeUsed', /* CACHED_RESPONSE_WILL_BE_USED */
+
+              isReturnValueProblem: true,
+            });
           }
         }
       }
+    }
 
-      return cachedResponse;
-    };
+    return cachedResponse;
+  };
     /**
      * Wrapper around cache.put().
      *
@@ -853,105 +794,105 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    const putWrapper = async ({
-      cacheName,
+  const putWrapper = async ({
+    cacheName,
+    request,
+    response,
+    event,
+    plugins = [],
+    matchOptions,
+  }) => {
+    {
+      if (request.method && request.method !== 'GET') {
+        throw new WorkboxError('attempt-to-cache-non-get-request', {
+          url: getFriendlyURL(request.url),
+          method: request.method,
+        });
+      }
+    }
+
+    const effectiveRequest = await _getEffectiveRequest({
+      plugins,
       request,
-      response,
+      mode: 'write',
+    });
+
+    if (!response) {
+      {
+        logger.error('Cannot cache non-existent response for ' + `'${getFriendlyURL(effectiveRequest.url)}'.`);
+      }
+
+      throw new WorkboxError('cache-put-with-no-response', {
+        url: getFriendlyURL(effectiveRequest.url),
+      });
+    }
+
+    const responseToCache = await _isResponseSafeToCache({
       event,
-      plugins = [],
-      matchOptions
-    }) => {
+      plugins,
+      response,
+      request: effectiveRequest,
+    });
+
+    if (!responseToCache) {
       {
-        if (request.method && request.method !== 'GET') {
-          throw new WorkboxError('attempt-to-cache-non-get-request', {
-            url: getFriendlyURL(request.url),
-            method: request.method
-          });
-        }
+        logger.debug(`Response '${getFriendlyURL(effectiveRequest.url)}' will ` + 'not be cached.', responseToCache);
       }
 
-      const effectiveRequest = await _getEffectiveRequest({
-        plugins,
-        request,
-        mode: 'write'
-      });
+      return;
+    }
 
-      if (!response) {
-        {
-          logger.error(`Cannot cache non-existent response for ` + `'${getFriendlyURL(effectiveRequest.url)}'.`);
-        }
-
-        throw new WorkboxError('cache-put-with-no-response', {
-          url: getFriendlyURL(effectiveRequest.url)
-        });
-      }
-
-      const responseToCache = await _isResponseSafeToCache({
-        event,
-        plugins,
-        response,
-        request: effectiveRequest
-      });
-
-      if (!responseToCache) {
-        {
-          logger.debug(`Response '${getFriendlyURL(effectiveRequest.url)}' will ` + `not be cached.`, responseToCache);
-        }
-
-        return;
-      }
-
-      const cache = await self.caches.open(cacheName);
-      const updatePlugins = pluginUtils.filter(plugins, "cacheDidUpdate"
+    const cache = await self.caches.open(cacheName);
+    const updatePlugins = pluginUtils.filter(plugins, 'cacheDidUpdate',
       /* CACHE_DID_UPDATE */
-      );
-      const oldResponse = updatePlugins.length > 0 ? await matchWrapper({
+    );
+    const oldResponse = updatePlugins.length > 0 ? await matchWrapper({
+      cacheName,
+      matchOptions,
+      request: effectiveRequest,
+    }) : null;
+
+    {
+      logger.debug(`Updating the '${cacheName}' cache with a new Response for ` + `${getFriendlyURL(effectiveRequest.url)}.`);
+    }
+
+    try {
+      await cache.put(effectiveRequest, responseToCache);
+    } catch (error) {
+      // See https://developer.mozilla.org/en-US/docs/Web/API/DOMException#exception-QuotaExceededError
+      if (error.name === 'QuotaExceededError') {
+        await executeQuotaErrorCallbacks();
+      }
+
+      throw error;
+    }
+
+    for (const plugin of updatePlugins) {
+      await plugin['cacheDidUpdate'
+      /* CACHE_DID_UPDATE */
+      ].call(plugin, {
         cacheName,
-        matchOptions,
-        request: effectiveRequest
-      }) : null;
+        event,
+        oldResponse,
+        newResponse: responseToCache,
+        request: effectiveRequest,
+      });
+    }
+  };
 
-      {
-        logger.debug(`Updating the '${cacheName}' cache with a new Response for ` + `${getFriendlyURL(effectiveRequest.url)}.`);
-      }
+  const cacheWrapper = {
+    put: putWrapper,
+    match: matchWrapper,
+  };
 
-      try {
-        await cache.put(effectiveRequest, responseToCache);
-      } catch (error) {
-        // See https://developer.mozilla.org/en-US/docs/Web/API/DOMException#exception-QuotaExceededError
-        if (error.name === 'QuotaExceededError') {
-          await executeQuotaErrorCallbacks();
-        }
-
-        throw error;
-      }
-
-      for (const plugin of updatePlugins) {
-        await plugin["cacheDidUpdate"
-        /* CACHE_DID_UPDATE */
-        ].call(plugin, {
-          cacheName,
-          event,
-          oldResponse,
-          newResponse: responseToCache,
-          request: effectiveRequest
-        });
-      }
-    };
-
-    const cacheWrapper = {
-      put: putWrapper,
-      match: matchWrapper
-    };
-
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Wrapper around the fetch API.
      *
      * Will call requestWillFetch on available plugins.
@@ -967,160 +908,158 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-core
      */
 
-    const wrappedFetch = async ({
-      request,
-      fetchOptions,
-      event,
-      plugins = []
-    }) => {
-      if (typeof request === 'string') {
-        request = new Request(request);
-      } // We *should* be able to call `await event.preloadResponse` even if it's
-      // undefined, but for some reason, doing so leads to errors in our Node unit
-      // tests. To work around that, explicitly check preloadResponse's value first.
+  const wrappedFetch = async ({
+    request,
+    fetchOptions,
+    event,
+    plugins = [],
+  }) => {
+    if (typeof request === 'string') {
+      request = new Request(request);
+    } // We *should* be able to call `await event.preloadResponse` even if it's
+    // undefined, but for some reason, doing so leads to errors in our Node unit
+    // tests. To work around that, explicitly check preloadResponse's value first.
 
 
-      if (event instanceof FetchEvent && event.preloadResponse) {
-        const possiblePreloadResponse = await event.preloadResponse;
+    if (event instanceof FetchEvent && event.preloadResponse) {
+      const possiblePreloadResponse = await event.preloadResponse;
 
-        if (possiblePreloadResponse) {
-          {
-            logger.log(`Using a preloaded navigation response for ` + `'${getFriendlyURL(request.url)}'`);
-          }
-
-          return possiblePreloadResponse;
+      if (possiblePreloadResponse) {
+        {
+          logger.log('Using a preloaded navigation response for ' + `'${getFriendlyURL(request.url)}'`);
         }
-      }
 
-      {
-        finalAssertExports.isInstance(request, Request, {
-          paramName: 'request',
-          expectedClass: Request,
-          moduleName: 'workbox-core',
-          className: 'fetchWrapper',
-          funcName: 'wrappedFetch'
-        });
+        return possiblePreloadResponse;
       }
+    }
 
-      const failedFetchPlugins = pluginUtils.filter(plugins, "fetchDidFail"
+    {
+      finalAssertExports.isInstance(request, Request, {
+        paramName: 'request',
+        expectedClass: Request,
+        moduleName: 'workbox-core',
+        className: 'fetchWrapper',
+        funcName: 'wrappedFetch',
+      });
+    }
+
+    const failedFetchPlugins = pluginUtils.filter(plugins, 'fetchDidFail',
       /* FETCH_DID_FAIL */
-      ); // If there is a fetchDidFail plugin, we need to save a clone of the
+    ); // If there is a fetchDidFail plugin, we need to save a clone of the
       // original request before it's either modified by a requestWillFetch
       // plugin or before the original request's body is consumed via fetch().
 
-      const originalRequest = failedFetchPlugins.length > 0 ? request.clone() : null;
+    const originalRequest = failedFetchPlugins.length > 0 ? request.clone() : null;
 
-      try {
-        for (const plugin of plugins) {
-          if ("requestWillFetch"
+    try {
+      for (const plugin of plugins) {
+        if ('requestWillFetch'
           /* REQUEST_WILL_FETCH */
           in plugin) {
-            const pluginMethod = plugin["requestWillFetch"
-            /* REQUEST_WILL_FETCH */
-            ];
-            const requestClone = request.clone();
-            request = await pluginMethod.call(plugin, {
-              request: requestClone,
-              event
-            });
+          const pluginMethod = plugin['requestWillFetch'
+          /* REQUEST_WILL_FETCH */
+          ];
+          const requestClone = request.clone();
+          request = await pluginMethod.call(plugin, {
+            request: requestClone,
+            event,
+          });
 
-            if ("development" !== 'production') {
-              if (request) {
-                finalAssertExports.isInstance(request, Request, {
-                  moduleName: 'Plugin',
-                  funcName: "cachedResponseWillBeUsed"
-                  /* CACHED_RESPONSE_WILL_BE_USED */
-                  ,
-                  isReturnValueProblem: true
-                });
-              }
+          if ('development' !== 'production') {
+            if (request) {
+              finalAssertExports.isInstance(request, Request, {
+                moduleName: 'Plugin',
+                funcName: 'cachedResponseWillBeUsed', /* CACHED_RESPONSE_WILL_BE_USED */
+
+                isReturnValueProblem: true,
+              });
             }
           }
         }
-      } catch (err) {
-        throw new WorkboxError('plugin-error-request-will-fetch', {
-          thrownError: err
-        });
-      } // The request can be altered by plugins with `requestWillFetch` making
-      // the original request (Most likely from a `fetch` event) to be different
-      // to the Request we make. Pass both to `fetchDidFail` to aid debugging.
+      }
+    } catch (err) {
+      throw new WorkboxError('plugin-error-request-will-fetch', {
+        thrownError: err,
+      });
+    } // The request can be altered by plugins with `requestWillFetch` making
+    // the original request (Most likely from a `fetch` event) to be different
+    // to the Request we make. Pass both to `fetchDidFail` to aid debugging.
 
 
-      const pluginFilteredRequest = request.clone();
+    const pluginFilteredRequest = request.clone();
 
-      try {
-        let fetchResponse; // See https://github.com/GoogleChrome/workbox/issues/1796
+    try {
+      let fetchResponse; // See https://github.com/GoogleChrome/workbox/issues/1796
 
-        if (request.mode === 'navigate') {
-          fetchResponse = await fetch(request);
-        } else {
-          fetchResponse = await fetch(request, fetchOptions);
-        }
+      if (request.mode === 'navigate') {
+        fetchResponse = await fetch(request);
+      } else {
+        fetchResponse = await fetch(request, fetchOptions);
+      }
 
-        if ("development" !== 'production') {
-          logger.debug(`Network request for ` + `'${getFriendlyURL(request.url)}' returned a response with ` + `status '${fetchResponse.status}'.`);
-        }
+      if ('development' !== 'production') {
+        logger.debug('Network request for ' + `'${getFriendlyURL(request.url)}' returned a response with ` + `status '${fetchResponse.status}'.`);
+      }
 
-        for (const plugin of plugins) {
-          if ("fetchDidSucceed"
+      for (const plugin of plugins) {
+        if ('fetchDidSucceed'
           /* FETCH_DID_SUCCEED */
           in plugin) {
-            fetchResponse = await plugin["fetchDidSucceed"
-            /* FETCH_DID_SUCCEED */
-            ].call(plugin, {
-              event,
-              request: pluginFilteredRequest,
-              response: fetchResponse
-            });
+          fetchResponse = await plugin['fetchDidSucceed'
+          /* FETCH_DID_SUCCEED */
+          ].call(plugin, {
+            event,
+            request: pluginFilteredRequest,
+            response: fetchResponse,
+          });
 
-            if ("development" !== 'production') {
-              if (fetchResponse) {
-                finalAssertExports.isInstance(fetchResponse, Response, {
-                  moduleName: 'Plugin',
-                  funcName: "fetchDidSucceed"
-                  /* FETCH_DID_SUCCEED */
-                  ,
-                  isReturnValueProblem: true
-                });
-              }
+          if ('development' !== 'production') {
+            if (fetchResponse) {
+              finalAssertExports.isInstance(fetchResponse, Response, {
+                moduleName: 'Plugin',
+                funcName: 'fetchDidSucceed', /* FETCH_DID_SUCCEED */
+
+                isReturnValueProblem: true,
+              });
             }
           }
         }
-
-        return fetchResponse;
-      } catch (error) {
-        {
-          logger.error(`Network request for ` + `'${getFriendlyURL(request.url)}' threw an error.`, error);
-        }
-
-        for (const plugin of failedFetchPlugins) {
-          await plugin["fetchDidFail"
-          /* FETCH_DID_FAIL */
-          ].call(plugin, {
-            error,
-            event,
-            originalRequest: originalRequest.clone(),
-            request: pluginFilteredRequest.clone()
-          });
-        }
-
-        throw error;
       }
-    };
 
-    const fetchWrapper = {
-      fetch: wrappedFetch
-    };
+      return fetchResponse;
+    } catch (error) {
+      {
+        logger.error('Network request for ' + `'${getFriendlyURL(request.url)}' threw an error.`, error);
+      }
 
-    /*
+      for (const plugin of failedFetchPlugins) {
+        await plugin['fetchDidFail'
+        /* FETCH_DID_FAIL */
+        ].call(plugin, {
+          error,
+          event,
+          originalRequest: originalRequest.clone(),
+          request: pluginFilteredRequest.clone(),
+        });
+      }
+
+      throw error;
+    }
+  };
+
+  const fetchWrapper = {
+    fetch: wrappedFetch,
+  };
+
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    let supportStatus;
-    /**
+  let supportStatus;
+  /**
      * A utility function that determines whether the current browser supports
      * constructing a new `Response` from a `response.body` stream.
      *
@@ -1130,33 +1069,33 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @private
      */
 
-    function canConstructResponseFromBodyStream() {
-      if (supportStatus === undefined) {
-        const testResponse = new Response('');
+  function canConstructResponseFromBodyStream() {
+    if (supportStatus === undefined) {
+      const testResponse = new Response('');
 
-        if ('body' in testResponse) {
-          try {
-            new Response(testResponse.body);
-            supportStatus = true;
-          } catch (error) {
-            supportStatus = false;
-          }
+      if ('body' in testResponse) {
+        try {
+          new Response(testResponse.body);
+          supportStatus = true;
+        } catch (error) {
+          supportStatus = false;
         }
-
-        supportStatus = false;
       }
 
-      return supportStatus;
+      supportStatus = false;
     }
 
-    /*
+    return supportStatus;
+  }
+
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Allows developers to copy a response and modify its `headers`, `status`,
      * or `statusText` values (the values settable via a
      * [`ResponseInit`]{@link https://developer.mozilla.org/en-US/docs/Web/API/Response/Response#Syntax}
@@ -1173,28 +1112,28 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-core
      */
 
-    async function copyResponse(response, modifier) {
-      const clonedResponse = response.clone(); // Create a fresh `ResponseInit` object by cloning the headers.
+  async function copyResponse(response, modifier) {
+    const clonedResponse = response.clone(); // Create a fresh `ResponseInit` object by cloning the headers.
 
-      const responseInit = {
-        headers: new Headers(clonedResponse.headers),
-        status: clonedResponse.status,
-        statusText: clonedResponse.statusText
-      }; // Apply any user modifications.
+    const responseInit = {
+      headers: new Headers(clonedResponse.headers),
+      status: clonedResponse.status,
+      statusText: clonedResponse.statusText,
+    }; // Apply any user modifications.
 
-      const modifiedResponseInit = modifier ? modifier(responseInit) : responseInit; // Create the new response from the body stream and `ResponseInit`
-      // modifications. Note: not all browsers support the Response.body stream,
-      // so fall back to reading the entire body into memory as a blob.
+    const modifiedResponseInit = modifier ? modifier(responseInit) : responseInit; // Create the new response from the body stream and `ResponseInit`
+    // modifications. Note: not all browsers support the Response.body stream,
+    // so fall back to reading the entire body into memory as a blob.
 
-      const body = canConstructResponseFromBodyStream() ? clonedResponse.body : await clonedResponse.blob();
-      return new Response(body, modifiedResponseInit);
-    }
+    const body = canConstructResponseFromBodyStream() ? clonedResponse.body : await clonedResponse.blob();
+    return new Response(body, modifiedResponseInit);
+  }
 
-    try {
-      self['workbox:precaching:5.1.3'] && _();
-    } catch (e) {}
+  try {
+    self['workbox:precaching:5.1.3'] && _();
+  } catch (e) {}
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
@@ -1202,8 +1141,8 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
 
-    const REVISION_SEARCH_PARAM = '__WB_REVISION__';
-    /**
+  const REVISION_SEARCH_PARAM = '__WB_REVISION__';
+  /**
      * Converts a manifest entry into a versioned URL suitable for precaching.
      *
      * @param {Object|string} entry
@@ -1213,78 +1152,78 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    function createCacheKey(entry) {
-      if (!entry) {
-        throw new WorkboxError('add-to-cache-list-unexpected-type', {
-          entry
-        });
-      } // If a precache manifest entry is a string, it's assumed to be a versioned
-      // URL, like '/app.abcd1234.js'. Return as-is.
+  function createCacheKey(entry) {
+    if (!entry) {
+      throw new WorkboxError('add-to-cache-list-unexpected-type', {
+        entry,
+      });
+    } // If a precache manifest entry is a string, it's assumed to be a versioned
+    // URL, like '/app.abcd1234.js'. Return as-is.
 
 
-      if (typeof entry === 'string') {
-        const urlObject = new URL(entry, location.href);
-        return {
-          cacheKey: urlObject.href,
-          url: urlObject.href
-        };
-      }
-
-      const {
-        revision,
-        url
-      } = entry;
-
-      if (!url) {
-        throw new WorkboxError('add-to-cache-list-unexpected-type', {
-          entry
-        });
-      } // If there's just a URL and no revision, then it's also assumed to be a
-      // versioned URL.
-
-
-      if (!revision) {
-        const urlObject = new URL(url, location.href);
-        return {
-          cacheKey: urlObject.href,
-          url: urlObject.href
-        };
-      } // Otherwise, construct a properly versioned URL using the custom Workbox
-      // search parameter along with the revision info.
-
-
-      const cacheKeyURL = new URL(url, location.href);
-      const originalURL = new URL(url, location.href);
-      cacheKeyURL.searchParams.set(REVISION_SEARCH_PARAM, revision);
+    if (typeof entry === 'string') {
+      const urlObject = new URL(entry, location.href);
       return {
-        cacheKey: cacheKeyURL.href,
-        url: originalURL.href
+        cacheKey: urlObject.href,
+        url: urlObject.href,
       };
     }
 
-    /*
+    const {
+      revision,
+      url,
+    } = entry;
+
+    if (!url) {
+      throw new WorkboxError('add-to-cache-list-unexpected-type', {
+        entry,
+      });
+    } // If there's just a URL and no revision, then it's also assumed to be a
+    // versioned URL.
+
+
+    if (!revision) {
+      const urlObject = new URL(url, location.href);
+      return {
+        cacheKey: urlObject.href,
+        url: urlObject.href,
+      };
+    } // Otherwise, construct a properly versioned URL using the custom Workbox
+    // search parameter along with the revision info.
+
+
+    const cacheKeyURL = new URL(url, location.href);
+    const originalURL = new URL(url, location.href);
+    cacheKeyURL.searchParams.set(REVISION_SEARCH_PARAM, revision);
+    return {
+      cacheKey: cacheKeyURL.href,
+      url: originalURL.href,
+    };
+  }
+
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * @param {string} groupTitle
      * @param {Array<string>} deletedURLs
      *
      * @private
      */
 
-    const logGroup = (groupTitle, deletedURLs) => {
-      logger.groupCollapsed(groupTitle);
+  const logGroup = (groupTitle, deletedURLs) => {
+    logger.groupCollapsed(groupTitle);
 
-      for (const url of deletedURLs) {
-        logger.log(url);
-      }
+    for (const url of deletedURLs) {
+      logger.log(url);
+    }
 
-      logger.groupEnd();
-    };
+    logger.groupEnd();
+  };
     /**
      * @param {Array<string>} deletedURLs
      *
@@ -1293,44 +1232,44 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    function printCleanupDetails(deletedURLs) {
-      const deletionCount = deletedURLs.length;
+  function printCleanupDetails(deletedURLs) {
+    const deletionCount = deletedURLs.length;
 
-      if (deletionCount > 0) {
-        logger.groupCollapsed(`During precaching cleanup, ` + `${deletionCount} cached ` + `request${deletionCount === 1 ? ' was' : 's were'} deleted.`);
-        logGroup('Deleted Cache Requests', deletedURLs);
-        logger.groupEnd();
-      }
+    if (deletionCount > 0) {
+      logger.groupCollapsed('During precaching cleanup, ' + `${deletionCount} cached ` + `request${deletionCount === 1 ? ' was' : 's were'} deleted.`);
+      logGroup('Deleted Cache Requests', deletedURLs);
+      logger.groupEnd();
     }
+  }
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * @param {string} groupTitle
      * @param {Array<string>} urls
      *
      * @private
      */
 
-    function _nestedGroup(groupTitle, urls) {
-      if (urls.length === 0) {
-        return;
-      }
-
-      logger.groupCollapsed(groupTitle);
-
-      for (const url of urls) {
-        logger.log(url);
-      }
-
-      logger.groupEnd();
+  function _nestedGroup(groupTitle, urls) {
+    if (urls.length === 0) {
+      return;
     }
-    /**
+
+    logger.groupCollapsed(groupTitle);
+
+    for (const url of urls) {
+      logger.log(url);
+    }
+
+    logger.groupEnd();
+  }
+  /**
      * @param {Array<string>} urlsToPrecache
      * @param {Array<string>} urlsAlreadyPrecached
      *
@@ -1339,54 +1278,54 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    function printInstallDetails(urlsToPrecache, urlsAlreadyPrecached) {
-      const precachedCount = urlsToPrecache.length;
-      const alreadyPrecachedCount = urlsAlreadyPrecached.length;
+  function printInstallDetails(urlsToPrecache, urlsAlreadyPrecached) {
+    const precachedCount = urlsToPrecache.length;
+    const alreadyPrecachedCount = urlsAlreadyPrecached.length;
 
-      if (precachedCount || alreadyPrecachedCount) {
-        let message = `Precaching ${precachedCount} file${precachedCount === 1 ? '' : 's'}.`;
+    if (precachedCount || alreadyPrecachedCount) {
+      let message = `Precaching ${precachedCount} file${precachedCount === 1 ? '' : 's'}.`;
 
-        if (alreadyPrecachedCount > 0) {
-          message += ` ${alreadyPrecachedCount} ` + `file${alreadyPrecachedCount === 1 ? ' is' : 's are'} already cached.`;
-        }
-
-        logger.groupCollapsed(message);
-
-        _nestedGroup(`View newly precached URLs.`, urlsToPrecache);
-
-        _nestedGroup(`View previously precached URLs.`, urlsAlreadyPrecached);
-
-        logger.groupEnd();
+      if (alreadyPrecachedCount > 0) {
+        message += ` ${alreadyPrecachedCount} ` + `file${alreadyPrecachedCount === 1 ? ' is' : 's are'} already cached.`;
       }
-    }
 
-    /*
+      logger.groupCollapsed(message);
+
+      _nestedGroup('View newly precached URLs.', urlsToPrecache);
+
+      _nestedGroup('View previously precached URLs.', urlsAlreadyPrecached);
+
+      logger.groupEnd();
+    }
+  }
+
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Performs efficient precaching of assets.
      *
      * @memberof module:workbox-precaching
      */
 
-    class PrecacheController {
-      /**
+  class PrecacheController {
+    /**
        * Create a new PrecacheController.
        *
        * @param {string} [cacheName] An optional name for the cache, to override
        * the default precache name.
        */
-      constructor(cacheName) {
-        this._cacheName = cacheNames.getPrecacheName(cacheName);
-        this._urlsToCacheKeys = new Map();
-        this._urlsToCacheModes = new Map();
-        this._cacheKeysToIntegrities = new Map();
-      }
-      /**
+    constructor(cacheName) {
+      this._cacheName = cacheNames.getPrecacheName(cacheName);
+      this._urlsToCacheKeys = new Map();
+      this._urlsToCacheModes = new Map();
+      this._cacheKeysToIntegrities = new Map();
+    }
+    /**
        * This method will add items to the precache list, removing duplicates
        * and ensuring the information is valid.
        *
@@ -1396,63 +1335,63 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      addToCacheList(entries) {
-        {
-          finalAssertExports.isArray(entries, {
-            moduleName: 'workbox-precaching',
-            className: 'PrecacheController',
-            funcName: 'addToCacheList',
-            paramName: 'entries'
+    addToCacheList(entries) {
+      {
+        finalAssertExports.isArray(entries, {
+          moduleName: 'workbox-precaching',
+          className: 'PrecacheController',
+          funcName: 'addToCacheList',
+          paramName: 'entries',
+        });
+      }
+
+      const urlsToWarnAbout = [];
+
+      for (const entry of entries) {
+        // See https://github.com/GoogleChrome/workbox/issues/2259
+        if (typeof entry === 'string') {
+          urlsToWarnAbout.push(entry);
+        } else if (entry && entry.revision === undefined) {
+          urlsToWarnAbout.push(entry.url);
+        }
+
+        const {
+          cacheKey,
+          url,
+        } = createCacheKey(entry);
+        const cacheMode = typeof entry !== 'string' && entry.revision ? 'reload' : 'default';
+
+        if (this._urlsToCacheKeys.has(url) && this._urlsToCacheKeys.get(url) !== cacheKey) {
+          throw new WorkboxError('add-to-cache-list-conflicting-entries', {
+            firstEntry: this._urlsToCacheKeys.get(url),
+            secondEntry: cacheKey,
           });
         }
 
-        const urlsToWarnAbout = [];
-
-        for (const entry of entries) {
-          // See https://github.com/GoogleChrome/workbox/issues/2259
-          if (typeof entry === 'string') {
-            urlsToWarnAbout.push(entry);
-          } else if (entry && entry.revision === undefined) {
-            urlsToWarnAbout.push(entry.url);
-          }
-
-          const {
-            cacheKey,
-            url
-          } = createCacheKey(entry);
-          const cacheMode = typeof entry !== 'string' && entry.revision ? 'reload' : 'default';
-
-          if (this._urlsToCacheKeys.has(url) && this._urlsToCacheKeys.get(url) !== cacheKey) {
-            throw new WorkboxError('add-to-cache-list-conflicting-entries', {
-              firstEntry: this._urlsToCacheKeys.get(url),
-              secondEntry: cacheKey
+        if (typeof entry !== 'string' && entry.integrity) {
+          if (this._cacheKeysToIntegrities.has(cacheKey) && this._cacheKeysToIntegrities.get(cacheKey) !== entry.integrity) {
+            throw new WorkboxError('add-to-cache-list-conflicting-integrities', {
+              url,
             });
           }
 
-          if (typeof entry !== 'string' && entry.integrity) {
-            if (this._cacheKeysToIntegrities.has(cacheKey) && this._cacheKeysToIntegrities.get(cacheKey) !== entry.integrity) {
-              throw new WorkboxError('add-to-cache-list-conflicting-integrities', {
-                url
-              });
-            }
+          this._cacheKeysToIntegrities.set(cacheKey, entry.integrity);
+        }
 
-            this._cacheKeysToIntegrities.set(cacheKey, entry.integrity);
-          }
+        this._urlsToCacheKeys.set(url, cacheKey);
 
-          this._urlsToCacheKeys.set(url, cacheKey);
+        this._urlsToCacheModes.set(url, cacheMode);
 
-          this._urlsToCacheModes.set(url, cacheMode);
+        if (urlsToWarnAbout.length > 0) {
+          const warningMessage = 'Workbox is precaching URLs without revision ' + `info: ${urlsToWarnAbout.join(', ')}\nThis is generally NOT safe. ` + 'Learn more at https://bit.ly/wb-precache';
 
-          if (urlsToWarnAbout.length > 0) {
-            const warningMessage = `Workbox is precaching URLs without revision ` + `info: ${urlsToWarnAbout.join(', ')}\nThis is generally NOT safe. ` + `Learn more at https://bit.ly/wb-precache`;
-
-            {
-              logger.warn(warningMessage);
-            }
+          {
+            logger.warn(warningMessage);
           }
         }
       }
-      /**
+    }
+    /**
        * Precaches new and updated assets. Call this method from the service worker
        * install event.
        *
@@ -1464,68 +1403,68 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      async install({
-        event,
-        plugins
-      } = {}) {
-        {
-          if (plugins) {
-            finalAssertExports.isArray(plugins, {
-              moduleName: 'workbox-precaching',
-              className: 'PrecacheController',
-              funcName: 'install',
-              paramName: 'plugins'
-            });
-          }
-        }
-
-        const toBePrecached = [];
-        const alreadyPrecached = [];
-        const cache = await self.caches.open(this._cacheName);
-        const alreadyCachedRequests = await cache.keys();
-        const existingCacheKeys = new Set(alreadyCachedRequests.map(request => request.url));
-
-        for (const [url, cacheKey] of this._urlsToCacheKeys) {
-          if (existingCacheKeys.has(cacheKey)) {
-            alreadyPrecached.push(url);
-          } else {
-            toBePrecached.push({
-              cacheKey,
-              url
-            });
-          }
-        }
-
-        const precacheRequests = toBePrecached.map(({
-          cacheKey,
-          url
-        }) => {
-          const integrity = this._cacheKeysToIntegrities.get(cacheKey);
-
-          const cacheMode = this._urlsToCacheModes.get(url);
-
-          return this._addURLToCache({
-            cacheKey,
-            cacheMode,
-            event,
-            integrity,
-            plugins,
-            url
+    async install({
+      event,
+      plugins,
+    } = {}) {
+      {
+        if (plugins) {
+          finalAssertExports.isArray(plugins, {
+            moduleName: 'workbox-precaching',
+            className: 'PrecacheController',
+            funcName: 'install',
+            paramName: 'plugins',
           });
-        });
-        await Promise.all(precacheRequests);
-        const updatedURLs = toBePrecached.map(item => item.url);
-
-        {
-          printInstallDetails(updatedURLs, alreadyPrecached);
         }
-
-        return {
-          updatedURLs,
-          notUpdatedURLs: alreadyPrecached
-        };
       }
-      /**
+
+      const toBePrecached = [];
+      const alreadyPrecached = [];
+      const cache = await self.caches.open(this._cacheName);
+      const alreadyCachedRequests = await cache.keys();
+      const existingCacheKeys = new Set(alreadyCachedRequests.map((request) => request.url));
+
+      for (const [url, cacheKey] of this._urlsToCacheKeys) {
+        if (existingCacheKeys.has(cacheKey)) {
+          alreadyPrecached.push(url);
+        } else {
+          toBePrecached.push({
+            cacheKey,
+            url,
+          });
+        }
+      }
+
+      const precacheRequests = toBePrecached.map(({
+        cacheKey,
+        url,
+      }) => {
+        const integrity = this._cacheKeysToIntegrities.get(cacheKey);
+
+        const cacheMode = this._urlsToCacheModes.get(url);
+
+        return this._addURLToCache({
+          cacheKey,
+          cacheMode,
+          event,
+          integrity,
+          plugins,
+          url,
+        });
+      });
+      await Promise.all(precacheRequests);
+      const updatedURLs = toBePrecached.map((item) => item.url);
+
+      {
+        printInstallDetails(updatedURLs, alreadyPrecached);
+      }
+
+      return {
+        updatedURLs,
+        notUpdatedURLs: alreadyPrecached,
+      };
+    }
+    /**
        * Deletes assets that are no longer present in the current precache manifest.
        * Call this method from the service worker activate event.
        *
@@ -1533,28 +1472,28 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      async activate() {
-        const cache = await self.caches.open(this._cacheName);
-        const currentlyCachedRequests = await cache.keys();
-        const expectedCacheKeys = new Set(this._urlsToCacheKeys.values());
-        const deletedURLs = [];
+    async activate() {
+      const cache = await self.caches.open(this._cacheName);
+      const currentlyCachedRequests = await cache.keys();
+      const expectedCacheKeys = new Set(this._urlsToCacheKeys.values());
+      const deletedURLs = [];
 
-        for (const request of currentlyCachedRequests) {
-          if (!expectedCacheKeys.has(request.url)) {
-            await cache.delete(request);
-            deletedURLs.push(request.url);
-          }
+      for (const request of currentlyCachedRequests) {
+        if (!expectedCacheKeys.has(request.url)) {
+          await cache.delete(request);
+          deletedURLs.push(request.url);
         }
-
-        {
-          printCleanupDetails(deletedURLs);
-        }
-
-        return {
-          deletedURLs
-        };
       }
-      /**
+
+      {
+        printCleanupDetails(deletedURLs);
+      }
+
+      return {
+        deletedURLs,
+      };
+    }
+    /**
        * Requests the entry and saves it to the cache if the response is valid.
        * By default, any response with a status code of less than 400 (including
        * opaque responses) is considered valid.
@@ -1576,75 +1515,75 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      async _addURLToCache({
-        cacheKey,
-        url,
-        cacheMode,
+    async _addURLToCache({
+      cacheKey,
+      url,
+      cacheMode,
+      event,
+      plugins,
+      integrity,
+    }) {
+      const request = new Request(url, {
+        integrity,
+        cache: cacheMode,
+        credentials: 'same-origin',
+      });
+      let response = await fetchWrapper.fetch({
         event,
         plugins,
-        integrity
-      }) {
-        const request = new Request(url, {
-          integrity,
-          cache: cacheMode,
-          credentials: 'same-origin'
-        });
-        let response = await fetchWrapper.fetch({
-          event,
-          plugins,
-          request
-        }); // Allow developers to override the default logic about what is and isn't
+        request,
+      }); // Allow developers to override the default logic about what is and isn't
         // valid by passing in a plugin implementing cacheWillUpdate(), e.g.
         // a `CacheableResponsePlugin` instance.
 
-        let cacheWillUpdatePlugin;
+      let cacheWillUpdatePlugin;
 
-        for (const plugin of plugins || []) {
-          if ('cacheWillUpdate' in plugin) {
-            cacheWillUpdatePlugin = plugin;
-          }
+      for (const plugin of plugins || []) {
+        if ('cacheWillUpdate' in plugin) {
+          cacheWillUpdatePlugin = plugin;
         }
+      }
 
-        const isValidResponse = cacheWillUpdatePlugin ? // Use a callback if provided. It returns a truthy value if valid.
+      const isValidResponse = cacheWillUpdatePlugin // Use a callback if provided. It returns a truthy value if valid.
         // NOTE: invoke the method on the plugin instance so the `this` context
         // is correct.
-        await cacheWillUpdatePlugin.cacheWillUpdate({
+        ? await cacheWillUpdatePlugin.cacheWillUpdate({
           event,
           request,
-          response
-        }) : // Otherwise, default to considering any response status under 400 valid.
+          response,
+        }) // Otherwise, default to considering any response status under 400 valid.
         // This includes, by default, considering opaque responses valid.
-        response.status < 400; // Consider this a failure, leading to the `install` handler failing, if
+        : response.status < 400; // Consider this a failure, leading to the `install` handler failing, if
         // we get back an invalid response.
 
-        if (!isValidResponse) {
-          throw new WorkboxError('bad-precaching-response', {
-            url,
-            status: response.status
-          });
-        } // Redirected responses cannot be used to satisfy a navigation request, so
-        // any redirected response must be "copied" rather than cloned, so the new
-        // response doesn't contain the `redirected` flag. See:
-        // https://bugs.chromium.org/p/chromium/issues/detail?id=669363&desc=2#c1
-
-
-        if (response.redirected) {
-          response = await copyResponse(response);
-        }
-
-        await cacheWrapper.put({
-          event,
-          plugins,
-          response,
-          // `request` already uses `url`. We may be able to reuse it.
-          request: cacheKey === url ? request : new Request(cacheKey),
-          cacheName: this._cacheName,
-          matchOptions: {
-            ignoreSearch: true
-          }
+      if (!isValidResponse) {
+        throw new WorkboxError('bad-precaching-response', {
+          url,
+          status: response.status,
         });
+      } // Redirected responses cannot be used to satisfy a navigation request, so
+      // any redirected response must be "copied" rather than cloned, so the new
+      // response doesn't contain the `redirected` flag. See:
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=669363&desc=2#c1
+
+
+      if (response.redirected) {
+        response = await copyResponse(response);
       }
-      /**
+
+      await cacheWrapper.put({
+        event,
+        plugins,
+        response,
+        // `request` already uses `url`. We may be able to reuse it.
+        request: cacheKey === url ? request : new Request(cacheKey),
+        cacheName: this._cacheName,
+        matchOptions: {
+          ignoreSearch: true,
+        },
+      });
+    }
+    /**
        * Returns a mapping of a precached URL to the corresponding cache key, taking
        * into account the revision information for the URL.
        *
@@ -1652,10 +1591,10 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      getURLsToCacheKeys() {
-        return this._urlsToCacheKeys;
-      }
-      /**
+    getURLsToCacheKeys() {
+      return this._urlsToCacheKeys;
+    }
+    /**
        * Returns a list of all the URLs that have been precached by the current
        * service worker.
        *
@@ -1663,10 +1602,10 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      getCachedURLs() {
-        return [...this._urlsToCacheKeys.keys()];
-      }
-      /**
+    getCachedURLs() {
+      return [...this._urlsToCacheKeys.keys()];
+    }
+    /**
        * Returns the cache key used for storing a given URL. If that URL is
        * unversioned, like `/index.html', then the cache key will be the original
        * URL with a search parameter appended to it.
@@ -1677,11 +1616,11 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      getCacheKeyForURL(url) {
-        const urlObject = new URL(url, location.href);
-        return this._urlsToCacheKeys.get(urlObject.href);
-      }
-      /**
+    getCacheKeyForURL(url) {
+      const urlObject = new URL(url, location.href);
+      return this._urlsToCacheKeys.get(urlObject.href);
+    }
+    /**
        * This acts as a drop-in replacement for [`cache.match()`](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match)
        * with the following differences:
        *
@@ -1700,18 +1639,18 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      async matchPrecache(request) {
-        const url = request instanceof Request ? request.url : request;
-        const cacheKey = this.getCacheKeyForURL(url);
+    async matchPrecache(request) {
+      const url = request instanceof Request ? request.url : request;
+      const cacheKey = this.getCacheKeyForURL(url);
 
-        if (cacheKey) {
-          const cache = await self.caches.open(this._cacheName);
-          return cache.match(cacheKey);
-        }
-
-        return undefined;
+      if (cacheKey) {
+        const cache = await self.caches.open(this._cacheName);
+        return cache.match(cacheKey);
       }
-      /**
+
+      return undefined;
+    }
+    /**
        * Returns a function that can be used within a
        * {@link module:workbox-routing.Route} that will find a response for the
        * incoming request against the precache.
@@ -1726,37 +1665,37 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      createHandler(fallbackToNetwork = true) {
-        return async ({
-          request
-        }) => {
-          try {
-            const response = await this.matchPrecache(request);
+    createHandler(fallbackToNetwork = true) {
+      return async ({
+        request,
+      }) => {
+        try {
+          const response = await this.matchPrecache(request);
 
-            if (response) {
-              return response;
-            } // This shouldn't normally happen, but there are edge cases:
-            // https://github.com/GoogleChrome/workbox/issues/1441
+          if (response) {
+            return response;
+          } // This shouldn't normally happen, but there are edge cases:
+          // https://github.com/GoogleChrome/workbox/issues/1441
 
 
-            throw new WorkboxError('missing-precache-entry', {
-              cacheName: this._cacheName,
-              url: request instanceof Request ? request.url : request
-            });
-          } catch (error) {
-            if (fallbackToNetwork) {
-              {
-                logger.debug(`Unable to respond with precached response. ` + `Falling back to network.`, error);
-              }
-
-              return fetch(request);
+          throw new WorkboxError('missing-precache-entry', {
+            cacheName: this._cacheName,
+            url: request instanceof Request ? request.url : request,
+          });
+        } catch (error) {
+          if (fallbackToNetwork) {
+            {
+              logger.debug('Unable to respond with precached response. ' + 'Falling back to network.', error);
             }
 
-            throw error;
+            return fetch(request);
           }
-        };
-      }
-      /**
+
+          throw error;
+        }
+      };
+    }
+    /**
        * Returns a function that looks up `url` in the precache (taking into
        * account revision information), and returns the corresponding `Response`.
        *
@@ -1772,53 +1711,52 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
        */
 
 
-      createHandlerBoundToURL(url, fallbackToNetwork = true) {
-        const cacheKey = this.getCacheKeyForURL(url);
+    createHandlerBoundToURL(url, fallbackToNetwork = true) {
+      const cacheKey = this.getCacheKeyForURL(url);
 
-        if (!cacheKey) {
-          throw new WorkboxError('non-precached-url', {
-            url
-          });
-        }
-
-        const handler = this.createHandler(fallbackToNetwork);
-        const request = new Request(url);
-        return () => handler({
-          request
+      if (!cacheKey) {
+        throw new WorkboxError('non-precached-url', {
+          url,
         });
       }
 
+      const handler = this.createHandler(fallbackToNetwork);
+      const request = new Request(url);
+      return () => handler({
+        request,
+      });
     }
+  }
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    let precacheController;
-    /**
+  let precacheController;
+  /**
      * @return {PrecacheController}
      * @private
      */
 
-    const getOrCreatePrecacheController = () => {
-      if (!precacheController) {
-        precacheController = new PrecacheController();
-      }
+  const getOrCreatePrecacheController = () => {
+    if (!precacheController) {
+      precacheController = new PrecacheController();
+    }
 
-      return precacheController;
-    };
+    return precacheController;
+  };
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Removes any URL search parameters that should be ignored.
      *
      * @param {URL} urlObject The original URL.
@@ -1831,26 +1769,26 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    function removeIgnoredSearchParams(urlObject, ignoreURLParametersMatching = []) {
-      // Convert the iterable into an array at the start of the loop to make sure
-      // deletion doesn't mess up iteration.
-      for (const paramName of [...urlObject.searchParams.keys()]) {
-        if (ignoreURLParametersMatching.some(regExp => regExp.test(paramName))) {
-          urlObject.searchParams.delete(paramName);
-        }
+  function removeIgnoredSearchParams(urlObject, ignoreURLParametersMatching = []) {
+    // Convert the iterable into an array at the start of the loop to make sure
+    // deletion doesn't mess up iteration.
+    for (const paramName of [...urlObject.searchParams.keys()]) {
+      if (ignoreURLParametersMatching.some((regExp) => regExp.test(paramName))) {
+        urlObject.searchParams.delete(paramName);
       }
-
-      return urlObject;
     }
 
-    /*
+    return urlObject;
+  }
+
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Generator function that yields possible variations on the original URL to
      * check, one at a time.
      *
@@ -1861,49 +1799,49 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    function* generateURLVariations(url, {
-      ignoreURLParametersMatching,
-      directoryIndex,
-      cleanURLs,
-      urlManipulation
-    } = {}) {
-      const urlObject = new URL(url, location.href);
-      urlObject.hash = '';
-      yield urlObject.href;
-      const urlWithoutIgnoredParams = removeIgnoredSearchParams(urlObject, ignoreURLParametersMatching);
-      yield urlWithoutIgnoredParams.href;
+  function* generateURLVariations(url, {
+    ignoreURLParametersMatching,
+    directoryIndex,
+    cleanURLs,
+    urlManipulation,
+  } = {}) {
+    const urlObject = new URL(url, location.href);
+    urlObject.hash = '';
+    yield urlObject.href;
+    const urlWithoutIgnoredParams = removeIgnoredSearchParams(urlObject, ignoreURLParametersMatching);
+    yield urlWithoutIgnoredParams.href;
 
-      if (directoryIndex && urlWithoutIgnoredParams.pathname.endsWith('/')) {
-        const directoryURL = new URL(urlWithoutIgnoredParams.href);
-        directoryURL.pathname += directoryIndex;
-        yield directoryURL.href;
-      }
-
-      if (cleanURLs) {
-        const cleanURL = new URL(urlWithoutIgnoredParams.href);
-        cleanURL.pathname += '.html';
-        yield cleanURL.href;
-      }
-
-      if (urlManipulation) {
-        const additionalURLs = urlManipulation({
-          url: urlObject
-        });
-
-        for (const urlToAttempt of additionalURLs) {
-          yield urlToAttempt.href;
-        }
-      }
+    if (directoryIndex && urlWithoutIgnoredParams.pathname.endsWith('/')) {
+      const directoryURL = new URL(urlWithoutIgnoredParams.href);
+      directoryURL.pathname += directoryIndex;
+      yield directoryURL.href;
     }
 
-    /*
+    if (cleanURLs) {
+      const cleanURL = new URL(urlWithoutIgnoredParams.href);
+      cleanURL.pathname += '.html';
+      yield cleanURL.href;
+    }
+
+    if (urlManipulation) {
+      const additionalURLs = urlManipulation({
+        url: urlObject,
+      });
+
+      for (const urlToAttempt of additionalURLs) {
+        yield urlToAttempt.href;
+      }
+    }
+  }
+
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * This function will take the request URL and manipulate it based on the
      * configuration options.
      *
@@ -1915,27 +1853,27 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @private
      */
 
-    const getCacheKeyForURL = (url, options) => {
-      const precacheController = getOrCreatePrecacheController();
-      const urlsToCacheKeys = precacheController.getURLsToCacheKeys();
+  const getCacheKeyForURL = (url, options) => {
+    const precacheController = getOrCreatePrecacheController();
+    const urlsToCacheKeys = precacheController.getURLsToCacheKeys();
 
-      for (const possibleURL of generateURLVariations(url, options)) {
-        const possibleCacheKey = urlsToCacheKeys.get(possibleURL);
+    for (const possibleURL of generateURLVariations(url, options)) {
+      const possibleCacheKey = urlsToCacheKeys.get(possibleURL);
 
-        if (possibleCacheKey) {
-          return possibleCacheKey;
-        }
+      if (possibleCacheKey) {
+        return possibleCacheKey;
       }
-    };
+    }
+  };
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Adds a `fetch` listener to the service worker that will
      * respond to
      * [network requests]{@link https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#Custom_responses_to_requests}
@@ -1963,75 +1901,73 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * alternative URLs that should be checked for precache matches.
      */
 
-    const addFetchListener = ({
-      ignoreURLParametersMatching = [/^utm_/],
-      directoryIndex = 'index.html',
-      cleanURLs = true,
-      urlManipulation
-    } = {}) => {
-      const cacheName = cacheNames.getPrecacheName(); // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
+  const addFetchListener = ({
+    ignoreURLParametersMatching = [/^utm_/],
+    directoryIndex = 'index.html',
+    cleanURLs = true,
+    urlManipulation,
+  } = {}) => {
+    const cacheName = cacheNames.getPrecacheName(); // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
 
-      self.addEventListener('fetch', event => {
-        const precachedURL = getCacheKeyForURL(event.request.url, {
-          cleanURLs,
-          directoryIndex,
-          ignoreURLParametersMatching,
-          urlManipulation
-        });
+    self.addEventListener('fetch', (event) => {
+      const precachedURL = getCacheKeyForURL(event.request.url, {
+        cleanURLs,
+        directoryIndex,
+        ignoreURLParametersMatching,
+        urlManipulation,
+      });
 
-        if (!precachedURL) {
-          {
-            logger.debug(`Precaching did not find a match for ` + getFriendlyURL(event.request.url));
-          }
-
-          return;
+      if (!precachedURL) {
+        {
+          logger.debug(`Precaching did not find a match for ${getFriendlyURL(event.request.url)}`);
         }
 
-        let responsePromise = self.caches.open(cacheName).then(cache => {
-          return cache.match(precachedURL);
-        }).then(cachedResponse => {
-          if (cachedResponse) {
-            return cachedResponse;
-          } // Fall back to the network if we don't have a cached response
-          // (perhaps due to manual cache cleanup).
+        return;
+      }
 
+      let responsePromise = self.caches.open(cacheName).then((cache) => cache.match(precachedURL)).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        } // Fall back to the network if we don't have a cached response
+        // (perhaps due to manual cache cleanup).
 
-          {
-            logger.warn(`The precached response for ` + `${getFriendlyURL(precachedURL)} in ${cacheName} was not found. ` + `Falling back to the network instead.`);
-          }
-
-          return fetch(precachedURL);
-        });
 
         {
-          responsePromise = responsePromise.then(response => {
-            // Workbox is going to handle the route.
-            // print the routing details to the console.
-            logger.groupCollapsed(`Precaching is responding to: ` + getFriendlyURL(event.request.url));
-            logger.log(`Serving the precached url: ${precachedURL}`);
-            logger.groupCollapsed(`View request details here.`);
-            logger.log(event.request);
-            logger.groupEnd();
-            logger.groupCollapsed(`View response details here.`);
-            logger.log(response);
-            logger.groupEnd();
-            logger.groupEnd();
-            return response;
-          });
+          logger.warn('The precached response for ' + `${getFriendlyURL(precachedURL)} in ${cacheName} was not found. ` + 'Falling back to the network instead.');
         }
 
-        event.respondWith(responsePromise);
+        return fetch(precachedURL);
       });
-    };
 
-    /*
+      {
+        responsePromise = responsePromise.then((response) => {
+          // Workbox is going to handle the route.
+          // print the routing details to the console.
+          logger.groupCollapsed(`Precaching is responding to: ${getFriendlyURL(event.request.url)}`);
+          logger.log(`Serving the precached url: ${precachedURL}`);
+          logger.groupCollapsed('View request details here.');
+          logger.log(event.request);
+          logger.groupEnd();
+          logger.groupCollapsed('View response details here.');
+          logger.log(response);
+          logger.groupEnd();
+          logger.groupEnd();
+          return response;
+        });
+      }
+
+      event.respondWith(responsePromise);
+    });
+  };
+
+  /*
       Copyright 2019 Google LLC
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    let listenerAdded = false;
-    /**
+  let listenerAdded = false;
+  /**
      * Add a `fetch` listener to the service worker that will
      * respond to
      * [network requests]{@link https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#Custom_responses_to_requests}
@@ -2056,41 +1992,41 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    function addRoute(options) {
-      if (!listenerAdded) {
-        addFetchListener(options);
-        listenerAdded = true;
-      }
+  function addRoute(options) {
+    if (!listenerAdded) {
+      addFetchListener(options);
+      listenerAdded = true;
     }
+  }
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const plugins = [];
-    const precachePlugins = {
-      /*
+  const plugins = [];
+  const precachePlugins = {
+    /*
        * @return {Array}
        * @private
        */
-      get() {
-        return plugins;
-      },
+    get() {
+      return plugins;
+    },
 
-      /*
+    /*
        * @param {Array} newPlugins
        * @private
        */
-      add(newPlugins) {
-        plugins.push(...newPlugins);
-      }
+    add(newPlugins) {
+      plugins.push(...newPlugins);
+    },
 
-    };
+  };
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
@@ -2098,26 +2034,26 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
 
-    const installListener = event => {
-      const precacheController = getOrCreatePrecacheController();
-      const plugins = precachePlugins.get();
-      event.waitUntil(precacheController.install({
-        event,
-        plugins
-      }).catch(error => {
-        {
-          logger.error(`Service worker installation failed. It will ` + `be retried automatically during the next navigation.`);
-        } // Re-throw the error to ensure installation fails.
+  const installListener = (event) => {
+    const precacheController = getOrCreatePrecacheController();
+    const plugins = precachePlugins.get();
+    event.waitUntil(precacheController.install({
+      event,
+      plugins,
+    }).catch((error) => {
+      {
+        logger.error('Service worker installation failed. It will ' + 'be retried automatically during the next navigation.');
+      } // Re-throw the error to ensure installation fails.
 
 
-        throw error;
-      }));
-    };
+      throw error;
+    }));
+  };
 
-    const activateListener = event => {
-      const precacheController = getOrCreatePrecacheController();
-      event.waitUntil(precacheController.activate());
-    };
+  const activateListener = (event) => {
+    const precacheController = getOrCreatePrecacheController();
+    event.waitUntil(precacheController.activate());
+  };
     /**
      * Adds items to the precache list, removing any duplicates and
      * stores the files in the
@@ -2139,28 +2075,28 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      */
 
 
-    function precache(entries) {
-      const precacheController = getOrCreatePrecacheController();
-      precacheController.addToCacheList(entries);
+  function precache(entries) {
+    const precacheController = getOrCreatePrecacheController();
+    precacheController.addToCacheList(entries);
 
-      if (entries.length > 0) {
-        // NOTE: these listeners will only be added once (even if the `precache()`
-        // method is called multiple times) because event listeners are implemented
-        // as a set, where each listener must be unique.
-        // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
-        self.addEventListener('install', installListener);
-        self.addEventListener('activate', activateListener);
-      }
+    if (entries.length > 0) {
+      // NOTE: these listeners will only be added once (even if the `precache()`
+      // method is called multiple times) because event listeners are implemented
+      // as a set, where each listener must be unique.
+      // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
+      self.addEventListener('install', installListener);
+      self.addEventListener('activate', activateListener);
     }
+  }
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * This method will add entries to the precache list and add a route to
      * respond to fetch events.
      *
@@ -2175,20 +2111,20 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    function precacheAndRoute(entries, options) {
-      precache(entries);
-      addRoute(options);
-    }
+  function precacheAndRoute(entries, options) {
+    precache(entries);
+    addRoute(options);
+  }
 
-    /*
+  /*
       Copyright 2018 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    const SUBSTRING_TO_FIND = '-precache-';
-    /**
+  const SUBSTRING_TO_FIND = '-precache-';
+  /**
      * Cleans up incompatible precaches that were created by older versions of
      * Workbox, by a service worker registered under the current scope.
      *
@@ -2207,47 +2143,44 @@ define("./workbox-b90066a8.js",['exports'], function (exports) { 'use strict';
      * @memberof module:workbox-precaching
      */
 
-    const deleteOutdatedCaches = async (currentPrecacheName, substringToFind = SUBSTRING_TO_FIND) => {
-      const cacheNames = await self.caches.keys();
-      const cacheNamesToDelete = cacheNames.filter(cacheName => {
-        return cacheName.includes(substringToFind) && cacheName.includes(self.registration.scope) && cacheName !== currentPrecacheName;
-      });
-      await Promise.all(cacheNamesToDelete.map(cacheName => self.caches.delete(cacheName)));
-      return cacheNamesToDelete;
-    };
+  const deleteOutdatedCaches = async (currentPrecacheName, substringToFind = SUBSTRING_TO_FIND) => {
+    const cacheNames = await self.caches.keys();
+    const cacheNamesToDelete = cacheNames.filter((cacheName) => cacheName.includes(substringToFind) && cacheName.includes(self.registration.scope) && cacheName !== currentPrecacheName);
+    await Promise.all(cacheNamesToDelete.map((cacheName) => self.caches.delete(cacheName)));
+    return cacheNamesToDelete;
+  };
 
-    /*
+  /*
       Copyright 2019 Google LLC
 
       Use of this source code is governed by an MIT-style
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
-    /**
+  /**
      * Adds an `activate` event listener which will clean up incompatible
      * precaches that were created by older versions of Workbox.
      *
      * @memberof module:workbox-precaching
      */
 
-    function cleanupOutdatedCaches() {
-      // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
-      self.addEventListener('activate', event => {
-        const cacheName = cacheNames.getPrecacheName();
-        event.waitUntil(deleteOutdatedCaches(cacheName).then(cachesDeleted => {
-          {
-            if (cachesDeleted.length > 0) {
-              logger.log(`The following out-of-date precaches were cleaned up ` + `automatically:`, cachesDeleted);
-            }
+  function cleanupOutdatedCaches() {
+    // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
+    self.addEventListener('activate', (event) => {
+      const cacheName = cacheNames.getPrecacheName();
+      event.waitUntil(deleteOutdatedCaches(cacheName).then((cachesDeleted) => {
+        {
+          if (cachesDeleted.length > 0) {
+            logger.log('The following out-of-date precaches were cleaned up ' + 'automatically:', cachesDeleted);
           }
-        }));
-      });
-    }
+        }
+      }));
+    });
+  }
 
-    exports.cleanupOutdatedCaches = cleanupOutdatedCaches;
-    exports.clientsClaim = clientsClaim;
-    exports.precacheAndRoute = precacheAndRoute;
-    exports.skipWaiting = skipWaiting;
-
+  exports.cleanupOutdatedCaches = cleanupOutdatedCaches;
+  exports.clientsClaim = clientsClaim;
+  exports.precacheAndRoute = precacheAndRoute;
+  exports.skipWaiting = skipWaiting;
 });
-//# sourceMappingURL=workbox-b90066a8.js.map
+// # sourceMappingURL=workbox-b90066a8.js.map

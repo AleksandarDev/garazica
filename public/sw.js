@@ -13,25 +13,23 @@
 
 // If the loader is already loaded, just stop.
 if (!self.define) {
-  const singleRequire = name => {
+  const singleRequire = (name) => {
     if (name !== 'require') {
-      name = name + '.js';
+      name += '.js';
     }
     let promise = Promise.resolve();
     if (!registry[name]) {
-      
-        promise = new Promise(async resolve => {
-          if ("document" in self) {
-            const script = document.createElement("script");
-            script.src = name;
-            document.head.appendChild(script);
-            script.onload = resolve;
-          } else {
-            importScripts(name);
-            resolve();
-          }
-        });
-      
+      promise = new Promise(async (resolve) => {
+        if ('document' in self) {
+          const script = document.createElement('script');
+          script.src = name;
+          document.head.appendChild(script);
+          script.onload = resolve;
+        } else {
+          importScripts(name);
+          resolve();
+        }
+      });
     }
     return promise.then(() => {
       if (!registry[name]) {
@@ -43,11 +41,11 @@ if (!self.define) {
 
   const require = (names, resolve) => {
     Promise.all(names.map(singleRequire))
-      .then(modules => resolve(modules.length === 1 ? modules[0] : modules));
+      .then((modules) => resolve(modules.length === 1 ? modules[0] : modules));
   };
-  
+
   const registry = {
-    require: Promise.resolve(require)
+    require: Promise.resolve(require),
   };
 
   self.define = (moduleName, depsNames, factory) => {
@@ -56,24 +54,24 @@ if (!self.define) {
       return;
     }
     registry[moduleName] = Promise.resolve().then(() => {
-      let exports = {};
+      const exports = {};
       const module = {
-        uri: location.origin + moduleName.slice(1)
+        uri: location.origin + moduleName.slice(1),
       };
       return Promise.all(
-        depsNames.map(depName => {
-          switch(depName) {
-            case "exports":
+        depsNames.map((depName) => {
+          switch (depName) {
+            case 'exports':
               return exports;
-            case "module":
+            case 'module':
               return module;
             default:
               return singleRequire(depName);
           }
-        })
-      ).then(deps => {
+        }),
+      ).then((deps) => {
         const facValue = factory(...deps);
-        if(!exports.default) {
+        if (!exports.default) {
           exports.default = facValue;
         }
         return exports;
@@ -81,8 +79,7 @@ if (!self.define) {
     });
   };
 }
-define("./sw.js",['./workbox-b90066a8'], function (workbox) { 'use strict';
-
+define('./sw.js', ['./workbox-b90066a8'], (workbox) => {
   /**
   * Welcome to your Workbox-powered service worker!
   *
@@ -105,39 +102,38 @@ define("./sw.js",['./workbox-b90066a8'], function (workbox) { 'use strict';
    */
 
   workbox.precacheAndRoute([{
-    "url": "/_next/static/runtime/amp.js",
-    "revision": "2402d9faa492321238c6fb742a20fb51"
+    url: '/_next/static/runtime/amp.js',
+    revision: '2402d9faa492321238c6fb742a20fb51',
   }, {
-    "url": "/_next/static/runtime/amp.js.map",
-    "revision": "340448f78a90c6e7903b07bcb0c6956f"
+    url: '/_next/static/runtime/amp.js.map',
+    revision: '340448f78a90c6e7903b07bcb0c6956f',
   }, {
-    "url": "/_next/static/runtime/main.js",
-    "revision": "517314c271e5876967ca71cca4d63f6c"
+    url: '/_next/static/runtime/main.js',
+    revision: '517314c271e5876967ca71cca4d63f6c',
   }, {
-    "url": "/_next/static/runtime/main.js.map",
-    "revision": "d123fa7d2b46ebc9f458cfe08cffeade"
+    url: '/_next/static/runtime/main.js.map',
+    revision: 'd123fa7d2b46ebc9f458cfe08cffeade',
   }, {
-    "url": "/_next/static/runtime/polyfills.js",
-    "revision": "cf6f4b12f4634f8f79378d41f3a855a4"
+    url: '/_next/static/runtime/polyfills.js',
+    revision: 'cf6f4b12f4634f8f79378d41f3a855a4',
   }, {
-    "url": "/_next/static/runtime/polyfills.js.map",
-    "revision": "82dca635a629d8ab38c3ad85b2ad65a2"
+    url: '/_next/static/runtime/polyfills.js.map',
+    revision: '82dca635a629d8ab38c3ad85b2ad65a2',
   }, {
-    "url": "/_next/static/runtime/react-refresh.js",
-    "revision": "57d6b6dd46444111cc6c2cb191ec72bc"
+    url: '/_next/static/runtime/react-refresh.js',
+    revision: '57d6b6dd46444111cc6c2cb191ec72bc',
   }, {
-    "url": "/_next/static/runtime/react-refresh.js.map",
-    "revision": "3eefcd56d3f5bfcc8b7c33d935f42689"
+    url: '/_next/static/runtime/react-refresh.js.map',
+    revision: '3eefcd56d3f5bfcc8b7c33d935f42689',
   }, {
-    "url": "/_next/static/runtime/webpack.js",
-    "revision": "016edf1726518119f6ec270b7103a7d0"
+    url: '/_next/static/runtime/webpack.js',
+    revision: '016edf1726518119f6ec270b7103a7d0',
   }, {
-    "url": "/_next/static/runtime/webpack.js.map",
-    "revision": "d06b91e68a6954d3b542bd497a449aca"
+    url: '/_next/static/runtime/webpack.js.map',
+    revision: 'd06b91e68a6954d3b542bd497a449aca',
   }], {
-    "ignoreURLParametersMatching": [/ts/]
+    ignoreURLParametersMatching: [/ts/],
   });
   workbox.cleanupOutdatedCaches();
-
 });
-//# sourceMappingURL=sw.js.map
+// # sourceMappingURL=sw.js.map

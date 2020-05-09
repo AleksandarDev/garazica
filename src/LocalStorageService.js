@@ -5,7 +5,7 @@
  * @class LocalStorageService
  */
 class LocalStorageService {
-    /**
+  /**
      * Sets item to local storage if it is defined.
      *
      * @static
@@ -13,13 +13,13 @@ class LocalStorageService {
      * @param {string} itemValue Item's value
      * @memberof LocalStorageService
      */
-    static setItem(itemName, itemValue) {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(itemName, itemValue);
-      }
+  static setItem(itemName, itemValue) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(itemName, itemValue);
     }
-  
-    /**
+  }
+
+  /**
      * Retrieves the item from local storage if it is defiend.
      *
      * @static
@@ -27,26 +27,26 @@ class LocalStorageService {
      * @returns item's value or null if local storage is not defined
      * @memberof LocalStorageService
      */
-    static getItem(itemName) {
-      if (typeof localStorage !== 'undefined') {
-        return localStorage.getItem(itemName);
-      }
-  
-      return null;
+  static getItem(itemName) {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem(itemName);
     }
-  
-    /**
+
+    return null;
+  }
+
+  /**
      * Removes the item from local storage it it is defined.
      *
      * @static
      * @param {string} itemName Item's name
      * @memberof LocalStorageService
      */
-    static removeItem(itemName) {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem(itemName);
-      }
+  static removeItem(itemName) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem(itemName);
     }
   }
-  
-  export default LocalStorageService;
+}
+
+export default LocalStorageService;
