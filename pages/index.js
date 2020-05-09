@@ -2,7 +2,14 @@ import { useEffect } from "react";
 import anime from "animejs";
 import CoverImageDay from "../public/CoverDay.svg";
 import CoverImageNight from "../public/CoverNight.svg";
-import { Head } from "next/document";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+
+import styles from './index.module.scss';
 
 export default function Home() {
   useEffect(() => {
@@ -31,16 +38,26 @@ export default function Home() {
     }
   }, []);
 
-  const hours = new Date().getHours()
-  const isDayTime = hours > 6 && hours < 20
+  const isDayTime = new Date().getHours() > 6 && new Date().getHours() < 20;
 
   const CoverImage = isDayTime ? CoverImageDay : CoverImageNight;
 
   return (
-    <div>
+    <>
+    <AppBar position="static">
+      <Toolbar>
+        {/* <IconButton edge="start" className={styles.menuButton} color="inherit" aria-label="menu">
+          <MenuIcon />
+        </IconButton> */}
+        <img src="/icons/LogoDark-256x256.png" height={42} width={42} />
+        {/* <Typography variant="h6" className={styles.title}>
+          Garažica
+        </Typography> */}
+      </Toolbar>
+    </AppBar>
     <div className="converImageContainer">
       <CoverImage id="coverImage" />
     </div>
-    </div>
+    </>
   );
 }

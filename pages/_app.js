@@ -2,28 +2,22 @@ import "../styles/global.scss";
 import App from 'next/app'
 import Head from 'next/head'
 import React from 'react'
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from '../src/theme';
 
-export default class GApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {}
+export default function MyApp(props) {
+  const { Component, pageProps } = props;
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
-    }
-
-    return { pageProps }
-  }
-
-  render() {
-    const { Component, pageProps } = this.props
-
-    return (
+      return (
       <>
         <Head>
           <title>Garažica</title>
         </Head>
+        <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Component {...pageProps} />
+        </ThemeProvider>
       </>
-    )
-  }
+    );
 }

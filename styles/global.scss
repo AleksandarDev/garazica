@@ -20,15 +20,6 @@ body {
 }
 
 .converImageContainer {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  #coverImage {
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-  }
+  position: relative;
+  padding: 24px 0;
 }
