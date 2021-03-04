@@ -29,8 +29,8 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
   const coverImageRef = useRef<HTMLDivElement>(null);
   const invalidateCoverSize = () => {
     if (typeof window === 'undefined'
-    || coverImageRef == null
-    || coverImageRef.current == null) { return; }
+      || coverImageRef == null
+      || coverImageRef.current == null) { return; }
 
     const newWidth = window.innerWidth;
     const newHeight = newWidth < 1200 ? 456 : (newWidth / 1920) * 730;
@@ -52,7 +52,9 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
     }
   }, []);
 
-  if (typeof requestAnimationFrame !== 'undefined') { requestAnimationFrame(() => invalidateCoverSize()); }
+  if (typeof requestAnimationFrame !== 'undefined') {
+    requestAnimationFrame(() => invalidateCoverSize());
+  }
 
   const isDark = AppSettingsService.getIsNightMode();
   const CoverImage = isDark ? CoverImageNight : CoverImageDay;
@@ -64,7 +66,7 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
 
   return (
     <>
-      <AppBar position="static" color="transparent">
+      <AppBar position="static" color="transparent" component="header">
         <Toolbar>
           <Link href="/">
             <a className={styles.title}>
@@ -84,7 +86,7 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <div className="converImageContainer" ref={coverImageRef}>
+      <div className={styles.coverImageContainer} ref={coverImageRef}>
         <NoSsr>
           <CoverImage />
         </NoSsr>
