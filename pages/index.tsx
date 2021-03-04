@@ -11,7 +11,7 @@ import CoverImageNight from '../design/cover/CoverNight.svg';
 import CoverImageDay from '../design/cover/CoverDay.svg';
 import AppSettingsService from '../src/AppSettingsService';
 
-import styles from './index.module.scss';
+import styles from '../styles/index.module.scss';
 
 export default function Home({ onThemeChange }: any): React.ReactElement {
   useEffect(() => {
