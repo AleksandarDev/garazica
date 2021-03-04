@@ -11,16 +11,8 @@ export default class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta
-            name="viewport"
-            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-          />
           <meta name="description" content="Description" />
           <meta name="keywords" content="Keywords" />
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
           <meta name="Description" content="." />
 
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

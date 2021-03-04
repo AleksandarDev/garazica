@@ -10,7 +10,9 @@ const pwaConfig = [withPWA, {
   },
 }];
 
+const nextConfig = { };
+
 module.exports = withPlugins([
   imagesCongfig,
   pwaConfig,
-]);
+], nextConfig);

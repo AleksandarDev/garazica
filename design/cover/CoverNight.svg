@@ -488,7 +488,6 @@
         <rect id="Rectangle_90-2" data-name="Rectangle 90" width="33" height="2" fill="rgba(0,0,0,0.1)"/>
       </g>
       <text id="Garažica" transform="translate(826 555)" fill="#efefef" font-size="72" font-family="Raleway-Regular, Raleway"><tspan x="0" y="0">Garažica</tspan></text>
-      <text id="ZAGREB" transform="translate(831 584)" fill="#efefef" font-size="32" font-family="Raleway-Regular, Raleway"><tspan x="0" y="0">ZAGREB</tspan></text>
     </g>
     <path id="Ground" d="M0,0H1920V44H0Z" transform="translate(7 798)" fill="#484848"/>
     <path id="GroundShadow" d="M0,0H1920V22H0Z" transform="translate(7 820)" fill="rgba(0,0,0,0.4)"/>

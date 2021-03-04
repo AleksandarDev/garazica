@@ -503,7 +503,6 @@
         <rect id="Rectangle_90-2" data-name="Rectangle 90" width="33" height="2" fill="rgba(0,0,0,0.1)"/>
       </g>
       <text id="Garažica" transform="translate(826 555)" font-size="72" font-family="Raleway-Regular, Raleway"><tspan x="0" y="0">Garažica</tspan></text>
-      <text id="ZAGREB" transform="translate(831 584)" font-size="32" font-family="Raleway-Regular, Raleway"><tspan x="0" y="0">ZAGREB</tspan></text>
     </g>
     <rect id="Ground-2" data-name="Ground" width="1920" height="22" transform="translate(0 820)" fill="#efefef"/>
   </g>
