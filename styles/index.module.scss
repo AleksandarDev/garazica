@@ -1,22 +1,20 @@
 .root {
-    flex-grow: 1;
-}
-
-.menuButton {
-    margin-right: 8px;
+  flex-grow: 1;
 }
 
 .title {
-    flex-grow: 1;
-}
-
-.themeToggleButton {
-    .MuiToggleButton {
-        border-radius: 0;
-    }
+  flex-grow: 1;
 }
 
 .converImageContainer {
-    position: relative;
-    padding: 24px 0;
+  position: relative;
+  padding: 24px 0;
+}
+
+.categoryContainer {
+  border: 1px solid transparent;
+
+  &:hover {
+    border-color: rgba(0,0,0,0.12);
   }
+}

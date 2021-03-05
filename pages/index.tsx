@@ -4,14 +4,42 @@ import anime from 'animejs';
 import Link from 'next/link';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { IconButton, NoSsr } from '@material-ui/core';
+import { Avatar, Box, Card, CardActionArea, CardContent, Grid, IconButton, NoSsr, Typography } from '@material-ui/core';
 import DayIcon from '@material-ui/icons/WbSunny';
 import NightIcon from '@material-ui/icons/Brightness3';
 import CoverImageNight from '../design/cover/CoverNight.svg';
 import CoverImageDay from '../design/cover/CoverDay.svg';
 import AppSettingsService from '../src/AppSettingsService';
-
+import { Container } from '@material-ui/core';
+import { Build, Computer, DeveloperBoard } from '@material-ui/icons';
 import styles from '../styles/index.module.scss';
+
+interface ICategory {
+  id: string,
+  label: string,
+  icon: React.ReactNode
+}
+
+const CategoryItem = ({ category }: { category: ICategory }) => {
+  return (
+    <Link href={`/category/${category.id}`}>
+      <Card className={styles.categoryContainer} variant="elevation" elevation={0}>
+        <CardActionArea>
+          <CardContent>
+            <Grid container spacing={2} wrap="nowrap" alignItems="center">
+              <Grid item>
+                <Avatar variant="square" className={styles.categoryAvatar}>{category.icon}</Avatar>
+              </Grid>
+              <Grid item>
+                <Typography variant="h3">{category.label}</Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Link>
+  );
+}
 
 export default function Home({ onThemeChange }: any): React.ReactElement {
   useEffect(() => {
@@ -64,6 +92,12 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
     if (onThemeChange != null) { onThemeChange(); }
   };
 
+  const categories: ICategory[] = [
+    { id: 'electronics', label: 'Elektronika', icon: <DeveloperBoard /> },
+    { id: 'computers', label: 'Računala', icon: <Computer /> },
+    { id: 'tools', label: 'Alati', icon: <Build /> }
+  ];
+
   return (
     <>
       <AppBar position="static" color="transparent" component="header">
@@ -76,7 +110,6 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
             </a>
           </Link>
           <IconButton
-            className={styles.themeToggleButton}
             onClick={handleSwitchTheme}
             title="Toggle day/night mode"
           >
@@ -91,6 +124,15 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
           <CoverImage />
         </NoSsr>
       </div>
+      <Container fixed>
+        <section>
+          <Box my={4}>
+            <Grid container spacing={2}>
+              {categories.map(category => <Grid item key={category.id} xs={12} sm={4}><CategoryItem category={category} /></Grid>)}
+            </Grid>
+          </Box>
+        </section>
+      </Container>
     </>
   );
 }

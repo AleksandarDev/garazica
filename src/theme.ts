@@ -19,6 +19,11 @@ const theme = (isDark: boolean) => createMuiTheme({
       default: isDark ? '#121212' : '#ffffff',
     },
   },
+  typography: {
+    h1: {fontSize: '2.2em'},
+    h2: {fontSize: '2em'},
+    h3: {fontSize: '1.6em'}
+  },
   overrides: {
     MuiAppBar: {
       root: {
@@ -30,6 +35,11 @@ const theme = (isDark: boolean) => createMuiTheme({
         borderRadius: 0,
       },
     },
+    MuiCard: {
+      root: {
+        borderRadius: 0
+      }
+    }
   },
 });
 
