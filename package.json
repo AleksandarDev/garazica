@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
@@ -14,11 +15,12 @@
     "@material-ui/lab": "^4.0.0-alpha.52",
     "@mdx-js/loader": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
-    "@next/mdx": "^10.0.7",
+    "@next/mdx": "^10.0.8",
     "animejs": "^3.2.0",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "clsx": "^1.1.0",
-    "next": "10.0.7",
+    "jss": "^10.5.1",
+    "next": "10.0.8",
     "next-compose-plugins": "^2.2.0",
     "next-images": "^1.4.0",
     "next-pwa": "^5.0.5",
@@ -27,10 +29,11 @@
     "sass": "^1.26.5"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "7.13.8",
     "@types/animejs": "^3.1.0",
+    "@types/mdx-js__react": "^1.5.3",
     "@types/node": "^14.14.31",
-    "@types/react": "^17.0.2",
+    "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.1",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
@@ -42,7 +45,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "next-sitemap": "^1.5.10",
-    "typescript": "^4.2.2",
+    "typescript": "^4.2.3",
     "webpack": "^4.46.0"
   }
 }
