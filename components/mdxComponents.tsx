@@ -20,11 +20,11 @@ const components = {
         return memo(P);
     })(),
     h1: (() => {
-        const H1 = (props) => <Typography gutterBottom {...props} component="h1" variant="h1" />;
+        const H1 = (props) => <Typography gutterBottom {...props} component="h1" variant="h1" id={typeof props.children === 'string' ? (props.children as string).toLowerCase().replace(' ', '-') : undefined} />;
         return memo(H1);
     })(),
     h2: (() => {
-        const H2 = (props) => <Typography gutterBottom {...props} component="h2" variant="h2" />;
+        const H2 = (props) => <Typography gutterBottom {...props} component="h2" variant="h2" id={typeof props.children === 'string' ? (props.children as string).toLowerCase().replace(' ', '-') : undefined} />;
         return memo(H2);
     })(),
     h3: (() => {

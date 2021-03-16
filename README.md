@@ -1,5 +1,8 @@
 # Garažica
 
+[Link](https://garazica.com/)
+[Preview](https://garazica-git-stage-dfnoise.vercel.app/)
+
 ## Getting started
 
 First, run the development server:

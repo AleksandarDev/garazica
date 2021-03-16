@@ -20,12 +20,12 @@ interface ICategory {
 
 const CategoryItem = ({ category }: { category: ICategory }) => (
     <Link href={`/areas/${category.id}`}>
-        <Card className={styles.categoryContainer} variant="elevation" elevation={0}>
+        <Card variant="elevation" elevation={0}>
             <CardActionArea>
                 <CardContent>
                     <Grid container spacing={2} wrap="nowrap" alignItems="center">
                         <Grid item>
-                            <Avatar variant="square" className={styles.categoryAvatar}>{category.icon}</Avatar>
+                            <Avatar variant="square">{category.icon}</Avatar>
                         </Grid>
                         <Grid item>
                             <Typography variant="h3">{category.label}</Typography>
@@ -41,7 +41,6 @@ const Home = () => {
     useEffect(() => {
         setTimeout(() => {
             const fadeGroup = document.getElementById('FadeGroup');
-            console.log('fade group', fadeGroup);
             anime({
                 targets: fadeGroup,
                 opacity: 0.3,

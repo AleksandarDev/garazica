@@ -1,5 +1,5 @@
 import {
-    Box, IconButton, Toolbar
+    Box, Button, Divider, IconButton, Toolbar
 } from '@material-ui/core';
 import Link from 'next/link';
 import NightIcon from '@material-ui/icons/Brightness3';
@@ -23,13 +23,20 @@ const MainLayout = ({ onThemeChange, children }: {
             <header>
                 <AppBar position="static" color="transparent">
                     <Toolbar>
-                        <Box style={{ flexGrow: 1 }}>
+                        <Box pr={3}>
                             <Link href="/" passHref>
-                                <a>
+                                <a href="/">
                                     <img src={logoSource} height={42} width={42} alt="Cover" />
                                 </a>
                             </Link>
                         </Box>
+                        <Link href="/areas" passHref>
+                            <Button size="large">Istraži</Button>
+                        </Link>
+                        <Link href="/book" passHref>
+                            <Button size="large">Upute</Button>
+                        </Link>
+                        <div style={{ flexGrow: 1 }} />
                         <IconButton
                             onClick={handleSwitchTheme}
                             title="Toggle day/night mode"
