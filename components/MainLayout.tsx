@@ -1,5 +1,5 @@
 import {
-    Box, Button, Divider, IconButton, Toolbar
+    Box, Button, IconButton, Toolbar
 } from '@material-ui/core';
 import Link from 'next/link';
 import NightIcon from '@material-ui/icons/Brightness3';

@@ -1,41 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-    Avatar, Box, Card, CardActionArea, CardContent,
-    Container, Grid, NoSsr, Typography
+    Box,
+    Container, Grid, NoSsr
 } from '@material-ui/core';
-import { Build, Computer, DeveloperBoard } from '@material-ui/icons';
 import anime from 'animejs';
-import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import AreaItem from '../components/Areas/AreaItem';
 import CoverImageDay from '../design/cover/CoverDay.svg';
 import CoverImageNight from '../design/cover/CoverNight.svg';
 import AppSettingsService from '../src/AppSettingsService';
+import areas from '../src/Areas';
 import styles from '../styles/index.module.scss';
-
-interface ICategory {
-  id: string,
-  label: string,
-  icon: React.ReactNode
-}
-
-const CategoryItem = ({ category }: { category: ICategory }) => (
-    <Link href={`/areas/${category.id}`}>
-        <Card variant="elevation" elevation={0}>
-            <CardActionArea>
-                <CardContent>
-                    <Grid container spacing={2} wrap="nowrap" alignItems="center">
-                        <Grid item>
-                            <Avatar variant="square">{category.icon}</Avatar>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h3">{category.label}</Typography>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </CardActionArea>
-        </Card>
-    </Link>
-);
 
 const Home = () => {
     useEffect(() => {
@@ -83,12 +58,6 @@ const Home = () => {
     const isDark = AppSettingsService.getIsNightMode();
     const CoverImage = isDark ? CoverImageNight : CoverImageDay;
 
-    const categories: ICategory[] = [
-        { id: 'electronics', label: 'Elektronika', icon: <DeveloperBoard /> },
-        { id: 'computers', label: 'Računala', icon: <Computer /> },
-        { id: 'tools', label: 'Alati', icon: <Build /> },
-    ];
-
     return (
         <>
             <div className={styles.coverImageContainer} ref={coverImageRef}>
@@ -97,17 +66,15 @@ const Home = () => {
                 </NoSsr>
             </div>
             <Container fixed>
-                <section>
-                    <Box my={4}>
-                        <Grid container spacing={2}>
-                            {categories.map((category) => (
-                                <Grid item key={category.id} xs={12} sm={4}>
-                                    <CategoryItem category={category} />
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Box>
-                </section>
+                <Box my={4}>
+                    <Grid container spacing={2}>
+                        {areas.map((area) => (
+                            <Grid item key={area.id} xs={12} sm={4}>
+                                <AreaItem area={area} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
             </Container>
         </>
     );
