@@ -41,7 +41,7 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
     }
 
     if (svgs != null && svgs.length > 0) {
-      svgs[0].setAttribute('style', `width: ${newWidth}; height: ${newHeight}`);
+      svgs[0].setAttribute('style', `width: ${newWidth}px; height: ${newHeight}px;`);
       const newViewBoxWidth = Math.max(window.innerWidth, 720);
       svgs[0].setAttribute('viewBox', `${(1920 - newViewBoxWidth) / 2} 0 ${newViewBoxWidth} 730`);
     }
