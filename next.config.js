@@ -1,18 +1,23 @@
-const withPlugins = require('next-compose-plugins');
-const withImages = require('next-images');
-const withPWA = require('next-pwa');
+// @ts-check
 
-const imagesCongfig = [withImages];
-const pwaConfig = [withPWA, {
-  pwa: {
-    disable: true,
-    dest: 'public',
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    forceSwcTransforms: true,
   },
-}];
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        options.defaultLoaders.babel,
+        {
+          loader: "@svgr/webpack",
+          options: { babel: false },
+        },
+      ],
+    });
+    return config;
+  },
+};
 
-const nextConfig = { };
-
-module.exports = withPlugins([
-  imagesCongfig,
-  pwaConfig,
-], nextConfig);
+export default nextConfig;

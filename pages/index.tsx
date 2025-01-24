@@ -2,11 +2,11 @@
 import React, { useEffect, useRef } from 'react';
 import anime from 'animejs';
 import Link from 'next/link';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import { IconButton, NoSsr } from '@material-ui/core';
-import DayIcon from '@material-ui/icons/WbSunny';
-import NightIcon from '@material-ui/icons/Brightness3';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import { IconButton, NoSsr } from '@mui/material';
+import DayIcon from '@mui/icons-material/WbSunny';
+import NightIcon from '@mui/icons-material/Brightness3';
 import CoverImageNight from '../design/cover/CoverNight.svg';
 import CoverImageDay from '../design/cover/CoverDay.svg';
 import AppSettingsService from '../src/AppSettingsService';
@@ -68,12 +68,10 @@ export default function Home({ onThemeChange }: any): React.ReactElement {
     <>
       <AppBar position="static" color="transparent" component="header">
         <Toolbar>
-          <Link href="/">
-            <a className={styles.title}>
+          <Link href="/" className={styles.title}>
               <NoSsr>
                 <img src={logoSource} height={42} width={42} alt="Cover" />
-              </NoSsr>
-            </a>
+            </NoSsr>
           </Link>
           <IconButton
             className={styles.themeToggleButton}

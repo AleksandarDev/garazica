@@ -1,9 +1,9 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
+import { createTheme } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
 
-const theme = (isDark: boolean) => createMuiTheme({
+const theme = (isDark: boolean) => createTheme({
   palette: {
-    type: isDark ? 'dark' : 'light',
+    mode: isDark ? 'dark' : 'light',
     primary: {
       light: '#000000',
       main: '#000000',
@@ -19,18 +19,22 @@ const theme = (isDark: boolean) => createMuiTheme({
       default: isDark ? '#121212' : '#ffffff',
     },
   },
-  overrides: {
+  components: {
     MuiAppBar: {
-      root: {
-        boxShadow: 'none',
+      styleOverrides: {
+        root: {
+          boxShadow: 'none',
+        },
       },
     },
     MuiButton: {
-      root: {
-        borderRadius: 0,
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
       },
     },
-  },
+  }
 });
 
 export default theme;
