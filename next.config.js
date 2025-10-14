@@ -14,7 +14,29 @@ const pwaConfig = [withPWA, {
     pageExtensions: ['tsx', 'mdx'],
 }];
 
-const nextConfig = { };
+const nextConfig = {
+    reactStrictMode: false,
+    swcMinify: false,
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    webpack: (config, options) => {
+        config.module.rules.push({
+            test: /\.svg$/,
+            use: [
+                options.defaultLoaders.babel,
+                {
+                    loader: "@svgr/webpack",
+                    options: { babel: false },
+                },
+            ],
+        });
+        return config;
+    },
+};
 
 module.exports = withPlugins([
     imagesCongfig,
