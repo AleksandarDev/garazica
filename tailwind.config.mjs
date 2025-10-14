@@ -1,9 +1,9 @@
 import { config } from '@signalco/ui-themes-minimal/config';
 import tailwindcssTypography from '@tailwindcss/typography';
-import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
 
-const tailwindConfig: Config = {
+/** @type {import('tailwindcss').Config} */
+export default {
     content: [
         './components/**/*.{js,ts,jsx,tsx,mdx}',
         './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -15,5 +15,3 @@ const tailwindConfig: Config = {
     presets: [config], // Use Signalco theme preset
     plugins: [tailwindcssAnimate, tailwindcssTypography],
 };
-
-export default tailwindConfig;
