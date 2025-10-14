@@ -1,25 +1,21 @@
-import {
-    Avatar, Card, CardActionArea, CardContent, Grid, Typography
-} from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
+import { Card, CardContent } from '@signalco/ui-primitives/Card';
+import { Row } from '@signalco/ui-primitives/Row';
+import { Typography } from '@signalco/ui-primitives/Typography';
 import { IAreaMetadata } from '../../src/Areas';
 
 const AreaItem = ({ area }: { area: IAreaMetadata }) => (
     <Link href={`/areas/${area.id}`}>
-        <Card variant="elevation" elevation={0}>
-            <CardActionArea>
-                <CardContent>
-                    <Grid container spacing={2} wrap="nowrap" alignItems="center">
-                        <Grid item>
-                            <Avatar variant="square">{area.icon}</Avatar>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h3">{area.label}</Typography>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </CardActionArea>
+        <Card className="cursor-pointer hover:bg-muted/50 transition-colors">
+            <CardContent>
+                <Row spacing={2} alignItems="center">
+                    <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/10 text-primary">
+                        {area.icon}
+                    </div>
+                    <Typography level="h3">{area.label}</Typography>
+                </Row>
+            </CardContent>
         </Card>
     </Link>
 );

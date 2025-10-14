@@ -1,18 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {
-    Box,
-    Container, Grid, NoSsr
-} from '@material-ui/core';
 import anime from 'animejs';
 import React, { useEffect, useRef } from 'react';
+import { useTheme } from 'next-themes';
 import AreaItem from '../components/Areas/AreaItem';
 import CoverImageDay from '../design/cover/CoverDay.svg';
 import CoverImageNight from '../design/cover/CoverNight.svg';
-import AppSettingsService from '../src/AppSettingsService';
 import areas from '../src/Areas';
 import styles from '../styles/index.module.scss';
 
 const Home = () => {
+    const { resolvedTheme } = useTheme();
+    
     useEffect(() => {
         setTimeout(() => {
             const fadeGroup = document.getElementById('FadeGroup');
@@ -55,27 +53,25 @@ const Home = () => {
         requestAnimationFrame(() => invalidateCoverSize());
     }
 
-    const isDark = AppSettingsService.getIsNightMode();
+    const isDark = resolvedTheme === 'dark';
     const CoverImage = isDark ? CoverImageNight : CoverImageDay;
 
     return (
         <>
             <div className={styles.coverImageContainer} ref={coverImageRef}>
-                <NoSsr>
-                    <CoverImage />
-                </NoSsr>
+                <CoverImage />
             </div>
-            <Container fixed>
-                <Box my={4}>
-                    <Grid container spacing={2}>
+            <div className="max-w-6xl mx-auto px-4">
+                <div className="my-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         {areas.map((area) => (
-                            <Grid item key={area.id} xs={12} sm={4}>
+                            <div key={area.id}>
                                 <AreaItem area={area} />
-                            </Grid>
+                            </div>
                         ))}
-                    </Grid>
-                </Box>
-            </Container>
+                    </div>
+                </div>
+            </div>
         </>
     );
 };
