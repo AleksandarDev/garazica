@@ -1,26 +1,17 @@
-import {
-    Avatar, Card, CardActionArea, CardContent, Grid, Typography
-} from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import { IAreaMetadata } from '../../src/Areas';
 
 const AreaItem = ({ area }: { area: IAreaMetadata }) => (
     <Link href={`/areas/${area.id}`}>
-        <Card variant="elevation" elevation={0}>
-            <CardActionArea>
-                <CardContent>
-                    <Grid container spacing={2} wrap="nowrap" alignItems="center">
-                        <Grid item>
-                            <Avatar variant="square">{area.icon}</Avatar>
-                        </Grid>
-                        <Grid item>
-                            <Typography variant="h3">{area.label}</Typography>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+        <div className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+            <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center w-10 h-10 rounded bg-gray-100 dark:bg-gray-800">
+                    {area.icon}
+                </div>
+                <h3 className="text-xl font-semibold">{area.label}</h3>
+            </div>
+        </div>
     </Link>
 );
 
