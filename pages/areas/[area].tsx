@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
-import { Typography } from '@signalco/ui-primitives/Typography';
 
 const AreaPage = () => {
     const router = useRouter();
@@ -11,11 +10,11 @@ const AreaPage = () => {
     }, [router.route]);
 
     return (
-        <Typography>
+        <p>
             Area:
             {' '}
             {area}
-        </Typography>
+        </p>
     );
 };
 

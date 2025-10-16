@@ -1,9 +1,6 @@
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useState } from 'react';
-import { Button } from '@signalco/ui-primitives/Button';
-import { IconButton } from '@signalco/ui-primitives/IconButton';
-import { Row } from '@signalco/ui-primitives/Row';
 import AppSettingsService from '../src/AppSettingsService';
 
 // Simple icon components to replace Material-UI icons
@@ -56,28 +53,27 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <header className="bg-transparent">
-                <Row spacing={2} className="p-4" justifyContent="space-between" alignItems="center">
-                    <Row spacing={2} alignItems="center">
-                        <Link href="/" passHref>
-                            <a href="/">
-                                <img src={logoSource} height={42} width={42} alt="Cover" />
-                            </a>
+                <div className="flex items-center justify-between gap-2 p-4">
+                    <div className="flex items-center gap-2">
+                        <Link href="/">
+                            <img src={logoSource} height={42} width={42} alt="Cover" />
                         </Link>
-                        <Link href="/areas" passHref>
-                            <Button variant="plain" size="lg">Istraži</Button>
+                        <Link href="/areas" className="text-lg px-4 py-2 hover:opacity-80">
+                            Istraži
                         </Link>
-                        <Link href="/book" passHref>
-                            <Button variant="plain" size="lg">Upute</Button>
+                        <Link href="/book" className="text-lg px-4 py-2 hover:opacity-80">
+                            Upute
                         </Link>
-                    </Row>
-                    <IconButton
+                    </div>
+                    <button
                         onClick={handleSwitchTheme}
                         title="Toggle day/night mode"
-                        variant="plain"
+                        className="p-2 hover:opacity-80"
+                        aria-label="Toggle theme"
                     >
                         {mounted && (isDark ? <NightIcon /> : <DayIcon />)}
-                    </IconButton>
-                </Row>
+                    </button>
+                </div>
             </header>
             {children}
         </>
