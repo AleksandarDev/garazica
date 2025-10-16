@@ -1,6 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+'use client';
+
 import anime from 'animejs';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import AreaItem from '../components/Areas/AreaItem';
 import CoverImageDay from '../design/cover/CoverDay.svg';
@@ -8,7 +9,7 @@ import CoverImageNight from '../design/cover/CoverNight.svg';
 import areas from '../src/Areas';
 import styles from '../styles/index.module.scss';
 
-const Home = () => {
+export default function Home() {
     const { resolvedTheme } = useTheme();
     
     useEffect(() => {
@@ -74,6 +75,4 @@ const Home = () => {
             </div>
         </>
     );
-};
-
-export default Home;
+}
