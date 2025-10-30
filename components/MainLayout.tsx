@@ -1,50 +1,26 @@
-import {
-    Box, Button, IconButton, Toolbar
-} from '@material-ui/core';
 import Link from 'next/link';
-import NightIcon from '@material-ui/icons/Brightness3';
-import AppBar from '@material-ui/core/AppBar';
-import DayIcon from '@material-ui/icons/WbSunny';
 import React from 'react';
-import AppSettingsService from '../src/AppSettingsService';
+import ThemeLogo from './ThemeLogo';
+import ThemeToggle from './ThemeToggle';
 
-const MainLayout = ({ onThemeChange, children }: {
-    onThemeChange: () => void, children: React.ReactNode
-}) => {
-    const isDark = AppSettingsService.getIsNightMode();
-    const logoSource = isDark ? '/icons/LogoDark-256x256.png' : '/icons/icon-128x128.png';
-
-    const handleSwitchTheme = () => {
-        if (onThemeChange != null) { onThemeChange(); }
-    };
-
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
-            <header>
-                <AppBar position="static" color="transparent">
-                    <Toolbar>
-                        <Box pr={3}>
-                            <Link href="/" passHref>
-                                <a href="/">
-                                    <img src={logoSource} height={42} width={42} alt="Cover" />
-                                </a>
-                            </Link>
-                        </Box>
-                        <Link href="/areas" passHref>
-                            <Button size="large">Istraži</Button>
+            <header className="bg-transparent">
+                <div className="flex items-center justify-between gap-2 p-4">
+                    <div className="flex items-center gap-2">
+                        <Link href="/">
+                            <ThemeLogo />
                         </Link>
-                        <Link href="/book" passHref>
-                            <Button size="large">Upute</Button>
+                        <Link href="/areas" className="text-lg px-4 py-2 hover:opacity-80">
+                            Istraži
                         </Link>
-                        <div style={{ flexGrow: 1 }} />
-                        <IconButton
-                            onClick={handleSwitchTheme}
-                            title="Toggle day/night mode"
-                        >
-                            {isDark ? <NightIcon /> : <DayIcon />}
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
+                        <Link href="/book" className="text-lg px-4 py-2 hover:opacity-80">
+                            Upute
+                        </Link>
+                    </div>
+                    <ThemeToggle />
+                </div>
             </header>
             {children}
         </>

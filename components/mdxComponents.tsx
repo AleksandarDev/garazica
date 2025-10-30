@@ -1,107 +1,116 @@
 // @ts-nocheck
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { memo } from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import MuiTable from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import { Container } from '@material-ui/core';
 import Link from 'next/link';
 
 const components = {
     a: Link,
     p: (() => {
-        const P = (props) => <Typography gutterBottom {...props} component="p" variant="body1" />;
+        const P = (props) => <p {...props} />;
         return memo(P);
     })(),
     h1: (() => {
-        const H1 = (props) => <Typography gutterBottom {...props} component="h1" variant="h1" id={typeof props.children === 'string' ? (props.children as string).toLowerCase().replace(' ', '-') : undefined} />;
+        const H1 = ({ children, ...props }) => (
+            <h1 
+                className="text-4xl font-bold mb-4"
+                {...props} 
+                id={typeof children === 'string' ? children.toLowerCase().replace(' ', '-') : undefined}
+            >
+                {children}
+            </h1>
+        );
         return memo(H1);
     })(),
     h2: (() => {
-        const H2 = (props) => <Typography gutterBottom {...props} component="h2" variant="h2" id={typeof props.children === 'string' ? (props.children as string).toLowerCase().replace(' ', '-') : undefined} />;
+        const H2 = ({ children, ...props }) => (
+            <h2 
+                className="text-3xl font-bold mb-3"
+                {...props}
+                id={typeof children === 'string' ? children.toLowerCase().replace(' ', '-') : undefined}
+            >
+                {children}
+            </h2>
+        );
         return memo(H2);
     })(),
     h3: (() => {
-        const H3 = (props) => <Typography gutterBottom {...props} component="h3" variant="h3" />;
+        const H3 = (props) => <h3 className="text-2xl font-semibold mb-2" {...props} />;
         return memo(H3);
     })(),
     h4: (() => {
-        const H4 = (props) => <Typography gutterBottom {...props} component="h4" variant="h4" />;
+        const H4 = (props) => <h4 className="text-xl font-semibold mb-2" {...props} />;
         return memo(H4);
     })(),
     h5: (() => {
-        const H5 = (props) => <Typography gutterBottom {...props} component="h5" variant="h5" />;
+        const H5 = (props) => <h5 className="text-lg font-semibold mb-1" {...props} />;
         return memo(H5);
     })(),
     h6: (() => {
-        const H6 = (props) => <Typography gutterBottom {...props} component="h6" variant="h6" />;
+        const H6 = (props) => <h6 className="text-base font-semibold mb-1" {...props} />;
         return memo(H6);
     })(),
     blockquote: (() => {
         const Blockquote = (props) => (
-            <Paper style={{ borderLeft: '4px solid grey', padding: 8 }} {...props} />
+            <div className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-4" {...props} />
         );
         return memo(Blockquote);
     })(),
     ul: (() => {
-        const Ul = (props) => <Typography {...props} component="ul" />;
+        const Ul = (props) => <ul className="list-disc list-inside mb-4" {...props} />;
         return memo(Ul);
     })(),
     ol: (() => {
-        const Ol = (props) => <Typography {...props} component="ol" />;
+        const Ol = (props) => <ol className="list-decimal list-inside mb-4" {...props} />;
         return memo(Ol);
     })(),
     li: (() => {
-        const Li = (props) => <Typography {...props} component="li" />;
+        const Li = (props) => <li className="mb-1" {...props} />;
         return memo(Li);
     })(),
     table: (() => {
-        const Table = (props) => <MuiTable {...props} />;
-        return memo(Table);
+        const TableComponent = (props) => <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-700 my-4" {...props} />;
+        return memo(TableComponent);
     })(),
     tr: (() => {
-        const Tr = (props) => <TableRow {...props} />;
+        const Tr = (props) => <tr className="border-b border-gray-200 dark:border-gray-700" {...props} />;
         return memo(Tr);
     })(),
     td: (() => {
         const Td = ({ align, ...props }) => (
-            <TableCell align={align || undefined} {...props} />
+            <td className="border border-gray-300 dark:border-gray-700 px-4 py-2" align={align || undefined} {...props} />
         );
         return memo(Td);
     })(),
     tbody: (() => {
-        const TBody = (props) => <TableBody {...props} />;
+        const TBody = (props) => <tbody {...props} />;
         return memo(TBody);
     })(),
     th: (() => {
         const Th = ({ align, ...props }) => (
-            <TableCell align={align || undefined} {...props} />
+            <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 bg-gray-100 dark:bg-gray-800 font-semibold" align={align || undefined} {...props} />
         );
         return memo(Th);
     })(),
     thead: (() => {
-        const THead = (props) => <TableHead {...props} />;
+        const THead = (props) => <thead {...props} />;
         return memo(THead);
     })(),
-    hr: Divider,
+    hr: (() => {
+        const Hr = (props) => <hr className="my-4 border-gray-300 dark:border-gray-600" {...props} />;
+        return memo(Hr);
+    })(),
     input: (() => {
         const Input = (props) => {
             const { type } = props;
             if (type === 'checkbox') {
-                return <Checkbox {...props} disabled={false} readOnly />;
+                return <input type="checkbox" className="mr-2" {...props} disabled={false} readOnly />;
             }
             return <input {...props} />;
         };
         return memo(Input);
     })(),
     wrapper: (() => {
-        const Wrapper = (props) => <Container maxWidth="md" {...props} className="markdown-body" />;
+        const Wrapper = (props) => <div className="max-w-3xl mx-auto px-4 markdown-body" {...props} />;
         return memo(Wrapper);
     })(),
 };
